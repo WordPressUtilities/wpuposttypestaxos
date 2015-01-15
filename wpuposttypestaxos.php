@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.8
+Version: 0.8.1
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -192,19 +192,20 @@ class wputh_add_post_types_taxonomies
         $taxonomies = $this->verify_taxonomies($taxonomies);
         foreach ($taxonomies as $slug => $taxo) {
 
+            $singular = $taxo['name'];
+            $plural = $singular . 's';
+
+            if (isset($taxo['plural'])) {
+                $plural = $taxo['plural'];
+            }
+
             $args = array(
-                'label' => $taxo['name'],
+                'label' => $plural,
                 'rewrite' => array(
                     'slug' => $slug
                 ) ,
                 'hierarchical' => $taxo['hierarchical']
             );
-
-            $singular = $taxo['name'];
-            $plural = $singular . 's';
-            if (isset($taxo['plural'])) {
-                $plural = $taxo['plural'];
-            }
 
             $args['labels'] = array(
                 'name' => $plural,

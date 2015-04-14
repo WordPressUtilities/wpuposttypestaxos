@@ -3,15 +3,14 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.8.1
+Version: 0.8.2
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
 License URI: http://opensource.org/licenses/MIT
 */
 
-class wputh_add_post_types_taxonomies
-{
+class wputh_add_post_types_taxonomies {
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -42,9 +41,9 @@ class wputh_add_post_types_taxonomies
 
     function __construct() {
 
-        // Load lang
-        load_plugin_textdomain('wpuposttypestaxos', false, dirname(plugin_basename(__FILE__)) . '/lang/');
-
+        add_action('plugins_loaded', array(&$this,
+            'load_plugin_textdomain'
+        ));
         add_action('init', array(&$this,
             'add_post_types'
         ));
@@ -63,6 +62,10 @@ class wputh_add_post_types_taxonomies
                 'add_editor_styles'
             ));
         }
+    }
+
+    function load_plugin_textdomain() {
+        load_plugin_textdomain('wpuposttypestaxos', false, dirname(plugin_basename(__FILE__)) . '/lang/');
     }
 
     /* ----------------------------------------------------------

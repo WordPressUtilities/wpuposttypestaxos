@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.8.2
+Version: 0.8.3
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -52,6 +52,10 @@ class wputh_add_post_types_taxonomies {
         ));
 
         if (is_admin()) {
+            add_action('dashboard_glance_items', array(&$this,
+                'add_dashboard_glance_items'
+            ));
+
             add_filter('manage_posts_columns', array(&$this,
                 'columns_head_taxo'
             ) , 10);
@@ -304,6 +308,38 @@ class wputh_add_post_types_taxonomies {
                 }
                 echo implode(', ', $content_term);
             }
+        }
+    }
+
+    /* ----------------------------------------------------------
+      Dashboard widget
+    ---------------------------------------------------------- */
+    function add_dashboard_glance_items() {
+        $args = array(
+            'public' => true,
+            '_builtin' => false
+        );
+        $output = 'object';
+        $operator = 'and';
+        $post_types = get_post_types($args, $output, $operator);
+        foreach ($post_types as $post_type) {
+            $num_posts = wp_count_posts($post_type->name);
+            $num = number_format_i18n($num_posts->publish);
+            $text = strtolower(_n($post_type->labels->singular_name, $post_type->labels->name, intval($num_posts->publish)));
+            if (current_user_can('edit_posts')) {
+                $cpt_name = $post_type->name;
+            }
+            echo '<li class="page-count"><tr><a href="' . admin_url('edit.php?post_type=' . $cpt_name) . '"><td class="first b b-' . $post_type->name . '"></td>' . $num . ' <td class="t ' . $post_type->name . '">' . $text . '</td></a></tr></li>';
+        }
+        $taxonomies = get_taxonomies($args, $output, $operator);
+        foreach ($taxonomies as $taxonomy) {
+            $num_terms = wp_count_terms($taxonomy->name);
+            $num = number_format_i18n($num_terms);
+            $text = strtolower(_n($taxonomy->labels->singular_name, $taxonomy->labels->name, intval($num_terms)));
+            if (current_user_can('manage_categories')) {
+                $cpt_tax = $taxonomy->name;
+            }
+            echo '<li class="post-count"><tr><a href="' . admin_url('edit-tags.php?taxonomy=' . $cpt_tax) . '"><td class="first b b-' . $taxonomy->name . '"></td>' . $num . ' <td class="t ' . $taxonomy->name . '">' . $text . '</td></a></tr></li>';
         }
     }
 

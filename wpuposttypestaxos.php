@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.8.3
+Version: 0.9
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -55,7 +55,6 @@ class wputh_add_post_types_taxonomies {
             add_action('dashboard_glance_items', array(&$this,
                 'add_dashboard_glance_items'
             ));
-
             add_filter('manage_posts_columns', array(&$this,
                 'columns_head_taxo'
             ) , 10);
@@ -77,8 +76,8 @@ class wputh_add_post_types_taxonomies {
     ---------------------------------------------------------- */
 
     public function add_post_types() {
-        $post_types = apply_filters('wputh_get_posttypes', array());
-        foreach ($post_types as $slug => $post_type) {
+        $this->post_types = apply_filters('wputh_get_posttypes', array());
+        foreach ($this->post_types as $slug => $post_type) {
 
             $args = array(
                 'menu_icon' => '',
@@ -196,8 +195,8 @@ class wputh_add_post_types_taxonomies {
 
     public function add_taxonomies() {
         $taxonomies = apply_filters('wputh_get_taxonomies', array());
-        $taxonomies = $this->verify_taxonomies($taxonomies);
-        foreach ($taxonomies as $slug => $taxo) {
+        $this->taxonomies = $this->verify_taxonomies($taxonomies);
+        foreach ($this->taxonomies as $slug => $taxo) {
 
             $singular = $taxo['name'];
             $plural = $singular . 's';
@@ -214,22 +213,44 @@ class wputh_add_post_types_taxonomies {
                 'hierarchical' => $taxo['hierarchical']
             );
 
+            // Female
+            $context = 'female';
+            if (!isset($taxo['female']) || $taxo['female'] != 1) {
+                $taxo['female'] = 0;
+                $context = 'male';
+            }
+
             $args['labels'] = array(
-                'name' => $plural,
+                'name' => ucfirst($plural),
                 'singular_name' => $singular,
-                'search_items' => sprintf(__('Search %s', 'wpuposttypestaxos') , strtolower($plural)) ,
-                'popular_items' => ucfirst(strtolower(sprintf(__('Popular %s', 'wpuposttypestaxos') , $plural))) ,
-                'all_items' => sprintf(__('All %s', 'wpuposttypestaxos') , strtolower($plural)) ,
-                'edit_item' => sprintf(__('Edit %s', 'wpuposttypestaxos') , strtolower($singular)) ,
-                'update_item' => sprintf(__('Update %s', 'wpuposttypestaxos') , strtolower($singular)) ,
-                'add_new_item' => sprintf(__('Add New %s', 'wpuposttypestaxos') , strtolower($singular)) ,
-                'new_item_name' => sprintf(__('New %s Name', 'wpuposttypestaxos') , strtolower($singular)) ,
-                'separate_items_with_commas' => sprintf(__('Separate %s with commas', 'wpuposttypestaxos') , strtolower($plural)) ,
-                'add_or_remove_items' => sprintf(__('Add or remove %s', 'wpuposttypestaxos') , strtolower($plural)) ,
-                'choose_from_most_used' => sprintf(__('Choose from the most used %s', 'wpuposttypestaxos') , strtolower($plural)) ,
-                'not_found' => sprintf(__('No %s found.', 'wpuposttypestaxos') , strtolower($plural)) ,
-                'menu_name' => $plural,
+                'menu_name' => ucfirst($plural),
             );
+
+            $args['labels']['search_items'] = sprintf(_x('Search %s', 'male', 'wpuposttypestaxos') , strtolower($singular));
+            $args['labels']['popular_items'] = ucfirst(strtolower(sprintf(_x('Popular %s', 'male', 'wpuposttypestaxos') , $plural)));
+            $args['labels']['all_items'] = sprintf(_x('All %s', 'male', 'wpuposttypestaxos') , strtolower($plural));
+            $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'male', 'wpuposttypestaxos') , strtolower($singular));
+            $args['labels']['update_item'] = sprintf(_x('Update %s', 'male', 'wpuposttypestaxos') , strtolower($singular));
+            $args['labels']['add_new_item'] = sprintf(_x('Add New %s', 'male', 'wpuposttypestaxos') , strtolower($singular));
+            $args['labels']['new_item_name'] = sprintf(_x('New %s Name', 'male', 'wpuposttypestaxos') , strtolower($singular));
+            $args['labels']['separate_items_with_commas'] = sprintf(_x('Separate %s with commas', 'male', 'wpuposttypestaxos') , strtolower($plural));
+            $args['labels']['add_or_remove_items'] = sprintf(_x('Add or remove %s', 'male', 'wpuposttypestaxos') , strtolower($plural));
+            $args['labels']['choose_from_most_used'] = sprintf(_x('Choose from the most used %s', 'male', 'wpuposttypestaxos') , strtolower($plural));
+            $args['labels']['not_found'] =  sprintf(_x('No %s found.', 'male', 'wpuposttypestaxos') , strtolower($singular)) ;
+
+            if ($context == 'female') {
+                $args['labels']['search_items'] = sprintf(_x('Search %s', 'female', 'wpuposttypestaxos') , strtolower($singular));
+                $args['labels']['popular_items'] = ucfirst(strtolower(sprintf(_x('Popular %s', 'female', 'wpuposttypestaxos') , $plural)));
+                $args['labels']['all_items'] = sprintf(_x('All %s', 'female', 'wpuposttypestaxos') , strtolower($plural));
+                $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'female', 'wpuposttypestaxos') , strtolower($singular));
+                $args['labels']['update_item'] = sprintf(_x('Update %s', 'female', 'wpuposttypestaxos') , strtolower($singular));
+                $args['labels']['add_new_item'] = sprintf(_x('Add New %s', 'female', 'wpuposttypestaxos') , strtolower($singular));
+                $args['labels']['new_item_name'] = sprintf(_x('New %s Name', 'female', 'wpuposttypestaxos') , strtolower($singular));
+                $args['labels']['separate_items_with_commas'] = sprintf(_x('Separate %s with commas', 'female', 'wpuposttypestaxos') , strtolower($plural));
+                $args['labels']['add_or_remove_items'] = sprintf(_x('Add or remove %s', 'female', 'wpuposttypestaxos') , strtolower($plural));
+                $args['labels']['choose_from_most_used'] = sprintf(_x('Choose from the most used %s', 'female', 'wpuposttypestaxos') , strtolower($plural));
+                $args['labels']['not_found'] =  sprintf(_x('No %s found.', 'female', 'wpuposttypestaxos') , strtolower($singular)) ;
+            }
 
             register_taxonomy($slug, $taxo['post_type'], $args);
         }
@@ -268,10 +289,7 @@ class wputh_add_post_types_taxonomies {
         $last_value = $defaults[$last_key];
         unset($defaults[$last_key]);
 
-        $taxonomies = apply_filters('wputh_get_taxonomies', array());
-        $taxonomies = $this->verify_taxonomies($taxonomies);
-
-        foreach ($taxonomies as $slug => $taxo) {
+        foreach ($this->taxonomies as $slug => $taxo) {
 
             // Add keys
             if ($taxo['admin_column'] && isset($post->post_type) && in_array($post->post_type, $taxo['post_type'])) {
@@ -289,10 +307,8 @@ class wputh_add_post_types_taxonomies {
         if (!isset($post->post_type)) {
             return;
         }
-        $taxonomies = apply_filters('wputh_get_taxonomies', array());
-        $taxonomies = $this->verify_taxonomies($taxonomies);
 
-        foreach ($taxonomies as $slug => $taxo) {
+        foreach ($this->taxonomies as $slug => $taxo) {
             if ($column_name == $slug && in_array($post->post_type, $taxo['post_type'])) {
                 $terms = wp_get_post_terms($post_id, $slug);
                 $content_term = array();
@@ -348,8 +364,7 @@ class wputh_add_post_types_taxonomies {
     ---------------------------------------------------------- */
 
     public function add_editor_styles() {
-        $post_types = apply_filters('wputh_get_posttypes', array());
-        foreach ($post_types as $post_type) {
+        foreach ($this->post_types as $post_type) {
             if (isset($post_type['editor_style'])) {
                 if (!is_array($post_type['editor_style'])) {
                     $post_type['editor_style'] = array(

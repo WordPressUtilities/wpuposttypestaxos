@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.9
+Version: 0.9.1
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -104,6 +104,7 @@ class wputh_add_post_types_taxonomies {
                 $args['publicly_queryable'] = false;
                 $args['query_var'] = false;
                 $args['rewrite'] = false;
+                $args['exclude_from_search'] = true;
             }
 
             // Default label: slug

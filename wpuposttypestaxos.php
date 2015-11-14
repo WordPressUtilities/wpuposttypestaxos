@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.9.1
+Version: 0.10
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -52,6 +52,9 @@ class wputh_add_post_types_taxonomies {
         ));
 
         if (is_admin()) {
+            add_action('add_meta_boxes', array(&$this,
+                'load_gallery_metabox'
+            ));
             add_action('dashboard_glance_items', array(&$this,
                 'add_dashboard_glance_items'
             ));
@@ -131,6 +134,12 @@ class wputh_add_post_types_taxonomies {
                 if (isset($post_type[$val_name]) && is_array($post_type[$val_name])) {
                     $args[$val_name] = $post_type[$val_name];
                 }
+            }
+
+            // Fix supports
+            $this->post_types[$slug]['add_media_box'] = false;
+            if (is_array($args['supports']) && isset($args['supports']['media'])) {
+                $this->post_types[$slug]['add_media_box'] = true;
             }
 
             // Add boolean values
@@ -222,9 +231,9 @@ class wputh_add_post_types_taxonomies {
             }
 
             $args['labels'] = array(
-                'name' => ucfirst($plural),
+                'name' => ucfirst($plural) ,
                 'singular_name' => $singular,
-                'menu_name' => ucfirst($plural),
+                'menu_name' => ucfirst($plural) ,
             );
 
             $args['labels']['search_items'] = sprintf(_x('Search %s', 'male', 'wpuposttypestaxos') , strtolower($singular));
@@ -237,7 +246,7 @@ class wputh_add_post_types_taxonomies {
             $args['labels']['separate_items_with_commas'] = sprintf(_x('Separate %s with commas', 'male', 'wpuposttypestaxos') , strtolower($plural));
             $args['labels']['add_or_remove_items'] = sprintf(_x('Add or remove %s', 'male', 'wpuposttypestaxos') , strtolower($plural));
             $args['labels']['choose_from_most_used'] = sprintf(_x('Choose from the most used %s', 'male', 'wpuposttypestaxos') , strtolower($plural));
-            $args['labels']['not_found'] =  sprintf(_x('No %s found.', 'male', 'wpuposttypestaxos') , strtolower($singular)) ;
+            $args['labels']['not_found'] = sprintf(_x('No %s found.', 'male', 'wpuposttypestaxos') , strtolower($singular));
 
             if ($context == 'female') {
                 $args['labels']['search_items'] = sprintf(_x('Search %s', 'female', 'wpuposttypestaxos') , strtolower($singular));
@@ -250,7 +259,7 @@ class wputh_add_post_types_taxonomies {
                 $args['labels']['separate_items_with_commas'] = sprintf(_x('Separate %s with commas', 'female', 'wpuposttypestaxos') , strtolower($plural));
                 $args['labels']['add_or_remove_items'] = sprintf(_x('Add or remove %s', 'female', 'wpuposttypestaxos') , strtolower($plural));
                 $args['labels']['choose_from_most_used'] = sprintf(_x('Choose from the most used %s', 'female', 'wpuposttypestaxos') , strtolower($plural));
-                $args['labels']['not_found'] =  sprintf(_x('No %s found.', 'female', 'wpuposttypestaxos') , strtolower($singular)) ;
+                $args['labels']['not_found'] = sprintf(_x('No %s found.', 'female', 'wpuposttypestaxos') , strtolower($singular));
             }
 
             register_taxonomy($slug, $taxo['post_type'], $args);
@@ -377,6 +386,30 @@ class wputh_add_post_types_taxonomies {
                 }
             }
         }
+    }
+
+    /* ----------------------------------------------------------
+      Load gallery ( Thx to @GeekPress )
+    ---------------------------------------------------------- */
+
+    function load_gallery_metabox() {
+        foreach ($this->post_types as $slug => $post_type) {
+            if (isset($this->post_types[$slug]['add_media_box'])) {
+                wp_enqueue_media();
+                add_meta_box('post_meta', 'Title', array(&$this,
+                    'load_media_upload'
+                ) , $slug, 'normal', 'high');
+            }
+        }
+    }
+    function load_media_upload() {
+        global $post;
+        echo '<a href="media-upload.php?post_id=' . $post->ID . '&TB_iframe=1" class="button insert-media add_media" id="content-add_media" onclick="return false;"><span style="vertical-align:-5px;margin-right:5px;" class="dashicons dashicons-admin-media"></span> ' . __('Add Media') . '</a>';
+        echo '<script>jQuery(document).ready(function() {
+        var postbox = jQuery("#content-add_media").closest(".postbox");
+    postbox.removeClass("postbox");
+    postbox.find(".handlediv, h3.hndle").remove();
+});</script>';
     }
 }
 

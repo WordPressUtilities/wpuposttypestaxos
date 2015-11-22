@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.10
+Version: 0.10.1
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -340,6 +340,7 @@ class wputh_add_post_types_taxonomies {
     /* ----------------------------------------------------------
       Dashboard widget
     ---------------------------------------------------------- */
+
     function add_dashboard_glance_items() {
         $args = array(
             'public' => true,
@@ -402,9 +403,10 @@ class wputh_add_post_types_taxonomies {
             }
         }
     }
+
     function load_media_upload() {
         global $post;
-        echo '<a href="media-upload.php?post_id=' . $post->ID . '&TB_iframe=1" class="button insert-media add_media" id="content-add_media" onclick="return false;"><span style="vertical-align:-5px;margin-right:5px;" class="dashicons dashicons-admin-media"></span> ' . __('Add Media') . '</a>';
+        echo '<div style="margin-bottom:20px;"><a href="media-upload.php?post_id=' . $post->ID . '&TB_iframe=1" class="button insert-media add_media" id="content-add_media" onclick="return false;"><span style="vertical-align:-5px;margin-right:5px;" class="dashicons dashicons-admin-media"></span> ' . __('Add Media') . '</a></div>';
         echo '<script>jQuery(document).ready(function() {
         var postbox = jQuery("#content-add_media").closest(".postbox");
     postbox.removeClass("postbox");

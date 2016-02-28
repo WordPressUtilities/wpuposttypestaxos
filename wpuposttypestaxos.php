@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.10.4
+Version: 0.10.5
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -60,7 +60,7 @@ class wputh_add_post_types_taxonomies {
             ));
             add_filter('manage_posts_columns', array(&$this,
                 'columns_head_taxo'
-            ), 10);
+            ), 10, 1);
             add_action('manage_posts_custom_column', array(&$this,
                 'columns_content_taxo'
             ), 10, 2);
@@ -287,6 +287,9 @@ class wputh_add_post_types_taxonomies {
                 $post_type = array(
                     $post_type
                 );
+            }
+            if (!isset($taxo['name'])) {
+                $taxonomies[$slug]['name'] = isset($taxo['label']) ? $taxo['label'] : $slug;
             }
             $taxonomies[$slug]['post_type'] = $post_type;
             $taxonomies[$slug]['hierarchical'] = isset($taxo['hierarchical']) ? $taxo['hierarchical'] : true;

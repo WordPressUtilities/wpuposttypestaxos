@@ -3,12 +3,14 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.10.5
+Version: 0.10.6
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
 License URI: http://opensource.org/licenses/MIT
 */
+
+defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
     private $values_array = array(
@@ -91,7 +93,7 @@ class wputh_add_post_types_taxonomies {
         foreach ($this->post_types as $slug => $post_type) {
 
             $args = array(
-                'menu_icon' => '',
+                'menu_icon' => 'dashicons-portfolio',
                 'exclude_from_search' => false,
                 'has_archive' => true,
                 'public' => true,

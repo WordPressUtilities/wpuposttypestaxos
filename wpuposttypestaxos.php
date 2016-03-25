@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.10.6
+Version: 0.11
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -203,6 +203,10 @@ class wputh_add_post_types_taxonomies {
                 $args['labels']['search_items'] = sprintf(_x('Search %s', 'female', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['not_found'] = sprintf(_x('No %s found', 'female', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['not_found_in_trash'] = sprintf(_x('No %s found in Trash', 'female', 'wpuposttypestaxos'), $post_type_name);
+            }
+
+            if (isset($post_type['labels'])) {
+                $args['labels'] = $post_type['labels'];
             }
 
             register_post_type($slug, $args);

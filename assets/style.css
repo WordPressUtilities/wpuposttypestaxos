@@ -5,3 +5,13 @@
 .wpuposttypetaxos-wrapper-addmedia {
     margin-bottom: 20px;
 }
+
+#dashboard_right_now li.wpucpt-count a:before {
+    display: none!important;
+}
+
+#dashboard_right_now li .wpucpt-icon {
+    float: left;
+    margin-right: 5px;
+    color: #82878c;
+}

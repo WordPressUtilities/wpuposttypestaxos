@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.11
+Version: 0.12
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,6 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
+    private $plugin_version = '0.12';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -52,6 +53,9 @@ class wputh_add_post_types_taxonomies {
         add_action('init', array(&$this,
             'add_taxonomies'
         ));
+        add_action('pre_get_posts', array(&$this,
+            'disable_taxonomy_front'
+        ));
 
         if (is_admin()) {
             add_action('add_meta_boxes', array(&$this,
@@ -76,7 +80,7 @@ class wputh_add_post_types_taxonomies {
     }
 
     public function admin_style() {
-        wp_register_style('wpuposttypestaxos_style', plugins_url('assets/style.css', __FILE__), false, '1.0.0');
+        wp_register_style('wpuposttypestaxos_style', plugins_url('assets/style.css', __FILE__), false, $this->plugin_version);
         wp_enqueue_style('wpuposttypestaxos_style');
     }
 
@@ -237,6 +241,13 @@ class wputh_add_post_types_taxonomies {
                 'hierarchical' => $taxo['hierarchical']
             );
 
+            // Hide only in front
+            if ($taxo['wputh__hide_front']) {
+                $args['rewrite'] = array(
+                    'with_front' => false
+                );
+            }
+
             // Female
             $context = 'female';
             if (!isset($taxo['female']) || $taxo['female'] != 1) {
@@ -280,6 +291,17 @@ class wputh_add_post_types_taxonomies {
         }
     }
 
+    public function disable_taxonomy_front($query) {
+        if (is_admin() || !is_tax()) {
+            return;
+        }
+        foreach ($this->taxonomies as $slug => $taxo) {
+            if ($taxo['wputh__hide_front'] && is_tax($slug)) {
+                $query->set_404();
+            }
+        }
+    }
+
     /* ----------------------------------------------------------
       Verify taxonomies
     ---------------------------------------------------------- */
@@ -298,6 +320,7 @@ class wputh_add_post_types_taxonomies {
                 $taxonomies[$slug]['name'] = isset($taxo['label']) ? $taxo['label'] : $slug;
             }
             $taxonomies[$slug]['post_type'] = $post_type;
+            $taxonomies[$slug]['wputh__hide_front'] = (isset($taxo['wputh__hide_front']) && is_bool($taxo['wputh__hide_front'])) ? $taxo['wputh__hide_front'] : false;
             $taxonomies[$slug]['hierarchical'] = isset($taxo['hierarchical']) ? $taxo['hierarchical'] : true;
             $taxonomies[$slug]['admin_column'] = isset($taxo['admin_column']) ? $taxo['admin_column'] : true;
         }
@@ -370,20 +393,18 @@ class wputh_add_post_types_taxonomies {
             $num_posts = wp_count_posts($post_type->name);
             $num = number_format_i18n($num_posts->publish);
             $text = strtolower(_n($post_type->labels->singular_name, $post_type->labels->name, intval($num_posts->publish)));
-            if (current_user_can('edit_posts')) {
-                $cpt_name = $post_type->name;
+            if (current_user_can($post_type->cap->edit_posts)) {
+                echo '<li class="wpucpt-count"><a href="' . admin_url('edit.php?post_type=' . $post_type->name) . '"><i class="wpucpt-icon dashicons ' . $post_type->menu_icon . '"></i>' . $num . ' ' . $text . '</a></li>';
             }
-            echo '<li class="page-count"><tr><a href="' . admin_url('edit.php?post_type=' . $cpt_name) . '"><td class="first b b-' . $post_type->name . '"></td>' . $num . ' <td class="t ' . $post_type->name . '">' . $text . '</td></a></tr></li>';
         }
         $taxonomies = get_taxonomies($args, $output, $operator);
         foreach ($taxonomies as $taxonomy) {
             $num_terms = wp_count_terms($taxonomy->name);
             $num = number_format_i18n($num_terms);
             $text = strtolower(_n($taxonomy->labels->singular_name, $taxonomy->labels->name, intval($num_terms)));
-            if (current_user_can('manage_categories')) {
-                $cpt_tax = $taxonomy->name;
+            if (current_user_can($taxonomy->cap->edit_terms)) {
+                echo '<li class="post-count"><a href="' . admin_url('edit-tags.php?taxonomy=' . $taxonomy->name) . '">' . $num . ' ' . $text . '</a></li>';
             }
-            echo '<li class="post-count"><tr><a href="' . admin_url('edit-tags.php?taxonomy=' . $cpt_tax) . '"><td class="first b b-' . $taxonomy->name . '"></td>' . $num . ' <td class="t ' . $taxonomy->name . '">' . $text . '</td></a></tr></li>';
         }
     }
 

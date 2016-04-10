@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.12
+Version: 0.12.1
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.12';
+    private $plugin_version = '0.12.1';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -402,8 +402,12 @@ class wputh_add_post_types_taxonomies {
             $num_terms = wp_count_terms($taxonomy->name);
             $num = number_format_i18n($num_terms);
             $text = strtolower(_n($taxonomy->labels->singular_name, $taxonomy->labels->name, intval($num_terms)));
+            $linked_post = '';
+            if (property_exists($taxonomy, 'object_type') && count($taxonomy->object_type) == 1) {
+                $linked_post = '&post_type=' . $taxonomy->object_type[0];
+            }
             if (current_user_can($taxonomy->cap->edit_terms)) {
-                echo '<li class="post-count"><a href="' . admin_url('edit-tags.php?taxonomy=' . $taxonomy->name) . '">' . $num . ' ' . $text . '</a></li>';
+                echo '<li class="post-count"><a href="' . admin_url('edit-tags.php?taxonomy=' . $taxonomy->name.$linked_post) . '">' . $num . ' ' . $text . '</a></li>';
             }
         }
     }

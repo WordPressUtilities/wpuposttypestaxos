@@ -3,6 +3,7 @@ WPU Post types & Taxos
 
 ## Add a post type
 
+```php
 add_filter('wputh_get_posttypes', 'wputh_set_theme_posttypes');
 function wputh_set_theme_posttypes($post_types) {
     $post_types['work'] = array(
@@ -13,9 +14,11 @@ function wputh_set_theme_posttypes($post_types) {
     );
     return $post_types;
 }
+```
 
 ## Add a taxonomy
 
+```php
 add_filter('wputh_get_taxonomies', 'wputh_set_theme_taxonomies');
 function wputh_set_theme_taxonomies($taxonomies) {
     $taxonomies['work-type'] = array(
@@ -24,4 +27,4 @@ function wputh_set_theme_taxonomies($taxonomies) {
     );
     return $taxonomies;
 }
-
+```

@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.12.1
+Version: 0.12.2
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.12.1';
+    private $plugin_version = '0.12.2';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -389,26 +389,37 @@ class wputh_add_post_types_taxonomies {
         $output = 'object';
         $operator = 'and';
         $post_types = get_post_types($args, $output, $operator);
-        foreach ($post_types as $post_type) {
+        foreach ($post_types as $id => $post_type) {
+            if (!current_user_can($post_type->cap->edit_posts)) {
+                continue;
+            }
+            $female = isset($this->post_types[$id], $this->post_types[$id]['female']) && $this->post_types[$id]['female'];
             $num_posts = wp_count_posts($post_type->name);
             $num = number_format_i18n($num_posts->publish);
             $text = strtolower(_n($post_type->labels->singular_name, $post_type->labels->name, intval($num_posts->publish)));
-            if (current_user_can($post_type->cap->edit_posts)) {
-                echo '<li class="wpucpt-count"><a href="' . admin_url('edit.php?post_type=' . $post_type->name) . '"><i class="wpucpt-icon dashicons ' . $post_type->menu_icon . '"></i>' . $num . ' ' . $text . '</a></li>';
+            if ($num == 0) {
+                $num = $female ? _x('No', 'female-none', 'wpuposttypestaxos') : _x('No', 'male-none', 'wpuposttypestaxos');
+                $text = strtolower($post_type->labels->singular_name);
             }
+            echo '<li class="wpucpt-count"><a href="' . admin_url('edit.php?post_type=' . $post_type->name) . '"><i class="wpucpt-icon dashicons ' . $post_type->menu_icon . '"></i>' . $num . ' ' . $text . '</a></li>';
         }
         $taxonomies = get_taxonomies($args, $output, $operator);
         foreach ($taxonomies as $taxonomy) {
+            if (!current_user_can($taxonomy->cap->edit_terms)) {
+                continue;
+            }
             $num_terms = wp_count_terms($taxonomy->name);
             $num = number_format_i18n($num_terms);
             $text = strtolower(_n($taxonomy->labels->singular_name, $taxonomy->labels->name, intval($num_terms)));
+            if ($num == 0) {
+                $num = $female ? _x('No', 'female-none', 'wpuposttypestaxos') : _x('No', 'male-none', 'wpuposttypestaxos');
+                $text = strtolower($taxonomy->labels->singular_name);
+            }
             $linked_post = '';
             if (property_exists($taxonomy, 'object_type') && count($taxonomy->object_type) == 1) {
                 $linked_post = '&post_type=' . $taxonomy->object_type[0];
             }
-            if (current_user_can($taxonomy->cap->edit_terms)) {
-                echo '<li class="post-count"><a href="' . admin_url('edit-tags.php?taxonomy=' . $taxonomy->name.$linked_post) . '">' . $num . ' ' . $text . '</a></li>';
-            }
+            echo '<li class="post-count"><a href="' . admin_url('edit-tags.php?taxonomy=' . $taxonomy->name . $linked_post) . '">' . $num . ' ' . $text . '</a></li>';
         }
     }
 

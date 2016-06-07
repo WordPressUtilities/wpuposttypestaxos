@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.12.2
+Version: 0.12.3
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.12.2';
+    private $plugin_version = '0.12.3';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -395,13 +395,17 @@ class wputh_add_post_types_taxonomies {
             }
             $female = isset($this->post_types[$id], $this->post_types[$id]['female']) && $this->post_types[$id]['female'];
             $num_posts = wp_count_posts($post_type->name);
+            $menu_icon = $post_type->menu_icon;
+            if (!$menu_icon) {
+                $menu_icon = 'dashicons-admin-post';
+            }
             $num = number_format_i18n($num_posts->publish);
             $text = strtolower(_n($post_type->labels->singular_name, $post_type->labels->name, intval($num_posts->publish)));
             if ($num == 0) {
                 $num = $female ? _x('No', 'female-none', 'wpuposttypestaxos') : _x('No', 'male-none', 'wpuposttypestaxos');
                 $text = strtolower($post_type->labels->singular_name);
             }
-            echo '<li class="wpucpt-count"><a href="' . admin_url('edit.php?post_type=' . $post_type->name) . '"><i class="wpucpt-icon dashicons ' . $post_type->menu_icon . '"></i>' . $num . ' ' . $text . '</a></li>';
+            echo '<li class="wpucpt-count"><a href="' . admin_url('edit.php?post_type=' . $post_type->name) . '"><i class="wpucpt-icon dashicons ' . $menu_icon . '"></i>' . $num . ' ' . $text . '</a></li>';
         }
         $taxonomies = get_taxonomies($args, $output, $operator);
         foreach ($taxonomies as $taxonomy) {

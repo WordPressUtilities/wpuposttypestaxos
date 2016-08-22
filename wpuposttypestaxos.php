@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.12.3
+Version: 0.12.4
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.12.3';
+    private $plugin_version = '0.12.4';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -145,7 +145,10 @@ class wputh_add_post_types_taxonomies {
 
             // Add array values
             foreach ($this->values_array as $val_name) {
-                if (isset($post_type[$val_name]) && is_array($post_type[$val_name])) {
+                if (isset($post_type[$val_name])) {
+                    if (!is_array($post_type[$val_name])) {
+                        $post_type[$val_name] = array($post_type[$val_name]);
+                    }
                     $args[$val_name] = $post_type[$val_name];
                 }
             }

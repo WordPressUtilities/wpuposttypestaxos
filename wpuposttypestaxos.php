@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.12.4
+Version: 0.12.5
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.12.4';
+    private $plugin_version = '0.12.5';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -411,10 +411,11 @@ class wputh_add_post_types_taxonomies {
             echo '<li class="wpucpt-count"><a href="' . admin_url('edit.php?post_type=' . $post_type->name) . '"><i class="wpucpt-icon dashicons ' . $menu_icon . '"></i>' . $num . ' ' . $text . '</a></li>';
         }
         $taxonomies = get_taxonomies($args, $output, $operator);
-        foreach ($taxonomies as $taxonomy) {
+        foreach ($taxonomies as $id => $taxonomy) {
             if (!current_user_can($taxonomy->cap->edit_terms)) {
                 continue;
             }
+            $female = isset($this->taxonomies[$id], $this->taxonomies[$id]['female']) && $this->taxonomies[$id]['female'];
             $num_terms = wp_count_terms($taxonomy->name);
             $num = number_format_i18n($num_terms);
             $text = strtolower(_n($taxonomy->labels->singular_name, $taxonomy->labels->name, intval($num_terms)));

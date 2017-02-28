@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.12.5
+Version: 0.13
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,12 +13,14 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.12.5';
+    private $plugin_version = '0.13';
     private $values_array = array(
         'supports',
         'taxonomies'
     );
     private $values_text = array(
+        'show_in_menu',
+        'menu_position',
         'menu_icon'
     );
     private $values_bool = array(
@@ -27,6 +29,7 @@ class wputh_add_post_types_taxonomies {
         'has_archive',
         'public',
         'publicly_queryable',
+        'show_in_nav_menus',
         'query_var',
         'rewrite',
         'show_ui',
@@ -43,7 +46,6 @@ class wputh_add_post_types_taxonomies {
     );
 
     public function __construct() {
-
         add_action('plugins_loaded', array(&$this,
             'load_plugin_textdomain'
         ));
@@ -58,6 +60,9 @@ class wputh_add_post_types_taxonomies {
         ));
 
         if (is_admin()) {
+            add_action('admin_menu', array(&$this,
+                'edit_admin_menu'
+            ), 90);
             add_action('add_meta_boxes', array(&$this,
                 'load_gallery_metabox'
             ));
@@ -460,6 +465,37 @@ class wputh_add_post_types_taxonomies {
                 }
             }
         }
+    }
+
+    /* ----------------------------------------------------------
+      Menu Order
+    ---------------------------------------------------------- */
+
+    public function edit_admin_menu() {
+        global $submenu;
+
+        foreach ($this->post_types as $k => $post_type) {
+            if (!isset($post_type['show_in_menu']) || empty($post_type['show_in_menu'])) {
+                continue;
+            }
+            if (!isset($submenu[$post_type['show_in_menu']])) {
+                continue;
+            }
+            if (!isset($post_type['position_in_nav_menu']) || !is_numeric($post_type['position_in_nav_menu'])) {
+                continue;
+            }
+            $this->moveElementToFrom($submenu[$post_type['show_in_menu']], $post_type['position_in_nav_menu']);
+        }
+    }
+
+    /* http://stackoverflow.com/a/28831998 */
+    public function moveElementToFrom(&$array, $to, $from = false) {
+        if ($from === false) {
+            $from = count($array) - 1;
+        }
+        $p1 = array_splice($array, $from, 1);
+        $p2 = array_splice($array, 0, $to);
+        $array = array_merge($p2, $p1, $array);
     }
 
     /* ----------------------------------------------------------

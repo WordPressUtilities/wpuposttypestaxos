@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WPU Options\n"
-"POT-Creation-Date: 2017-02-28 14:32+0100\n"
+"POT-Creation-Date: 2017-05-26 11:39+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Darklg <darklg.blog@gmail.com>\n"
 "Language-Team: \n"
@@ -211,17 +211,17 @@ msgctxt "female"
 msgid "No %s found."
 msgstr "Aucune %s trouvée."
 
-#: .././wpuposttypestaxos.php:413 .././wpuposttypestaxos.php:428
+#: .././wpuposttypestaxos.php:417 .././wpuposttypestaxos.php:432
 msgctxt "female-none"
 msgid "No"
 msgstr "Aucune"
 
-#: .././wpuposttypestaxos.php:413 .././wpuposttypestaxos.php:428
+#: .././wpuposttypestaxos.php:417 .././wpuposttypestaxos.php:432
 msgctxt "male-none"
 msgid "No"
 msgstr "Aucun"
 
-#: .././wpuposttypestaxos.php:519
+#: .././wpuposttypestaxos.php:523
 msgid "Add Media"
 msgstr "Ajouter un Media"
 

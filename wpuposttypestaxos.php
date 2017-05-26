@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.13
+Version: 0.13.1
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.13';
+    private $plugin_version = '0.13.1';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -217,7 +217,7 @@ class wputh_add_post_types_taxonomies {
                 $args['labels']['not_found_in_trash'] = sprintf(_x('No %s found in Trash', 'female', 'wpuposttypestaxos'), $post_type_name);
             }
 
-            if (isset($post_type['labels'])) {
+            if (isset($post_type['labels']) && is_array($post_type['labels'])) {
                 $args['labels'] = $post_type['labels'];
             }
 
@@ -293,6 +293,10 @@ class wputh_add_post_types_taxonomies {
                 $args['labels']['add_or_remove_items'] = sprintf(_x('Add or remove %s', 'female', 'wpuposttypestaxos'), strtolower($plural));
                 $args['labels']['choose_from_most_used'] = sprintf(_x('Choose from the most used %s', 'female', 'wpuposttypestaxos'), strtolower($plural));
                 $args['labels']['not_found'] = sprintf(_x('No %s found.', 'female', 'wpuposttypestaxos'), strtolower($singular));
+            }
+
+            if (isset($taxo['labels']) && is_array($taxo['labels'])) {
+                $args['labels'] = $taxo['labels'];
             }
 
             register_taxonomy($slug, $taxo['post_type'], $args);

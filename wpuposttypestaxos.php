@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.13.1
+Version: 0.13.2
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.13.1';
+    private $plugin_version = '0.13.2';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -58,6 +58,18 @@ class wputh_add_post_types_taxonomies {
         add_action('pre_get_posts', array(&$this,
             'disable_taxonomy_front'
         ));
+        add_action('save_post', array(&$this,
+            'clear_cache_posttype'
+        ), 10, 1);
+        add_action('create_term', array(&$this,
+            'clear_cache_taxonomy'
+        ), 10, 3);
+        add_action('edit_term', array(&$this,
+            'clear_cache_taxonomy'
+        ), 10, 3);
+        add_action('delete_term', array(&$this,
+            'clear_cache_taxonomy'
+        ), 10, 3);
 
         if (is_admin()) {
             add_action('admin_menu', array(&$this,
@@ -406,7 +418,7 @@ class wputh_add_post_types_taxonomies {
                 continue;
             }
             $female = isset($this->post_types[$id], $this->post_types[$id]['female']) && $this->post_types[$id]['female'];
-            $num_posts = wp_count_posts($post_type->name);
+            $num_posts = $this->wp_count_posts($post_type->name);
             $menu_icon = $post_type->menu_icon;
             if (!$menu_icon) {
                 $menu_icon = 'dashicons-admin-post';
@@ -425,7 +437,7 @@ class wputh_add_post_types_taxonomies {
                 continue;
             }
             $female = isset($this->taxonomies[$id], $this->taxonomies[$id]['female']) && $this->taxonomies[$id]['female'];
-            $num_terms = wp_count_terms($taxonomy->name);
+            $num_terms = $this->wp_count_terms($taxonomy->name);
             $num = number_format_i18n($num_terms);
             $text = strtolower(_n($taxonomy->labels->singular_name, $taxonomy->labels->name, intval($num_terms)));
             if ($num == 0) {
@@ -438,6 +450,40 @@ class wputh_add_post_types_taxonomies {
             }
             echo '<li class="post-count"><a href="' . admin_url('edit-tags.php?taxonomy=' . $taxonomy->name . $linked_post) . '">' . $num . ' ' . $text . '</a></li>';
         }
+    }
+
+    /* Posts Count
+    -------------------------- */
+
+    public function wp_count_posts($post_type_name) {
+        $cache_id = 'wpuposttypestaxos_count_posts_' . $post_type_name;
+        $result = wp_cache_get($cache_id);
+        if ($result === false) {
+            $result = wp_count_posts($post_type_name);
+            wp_cache_set($cache_id, $result, '', 86400);
+        }
+        return $result;
+    }
+
+    public function clear_cache_posttype($post_id) {
+        wp_cache_delete('wpuposttypestaxos_count_posts_' . get_post_type($post_id));
+    }
+
+    /* Terms Count
+    -------------------------- */
+
+    public function wp_count_terms($taxonomy_name) {
+        $cache_id = 'wpuposttypestaxos_count_terms_' . $taxonomy_name;
+        $result = wp_cache_get($cache_id);
+        if ($result === false) {
+            $result = wp_count_terms($taxonomy_name);
+            wp_cache_set($cache_id, $result, '', 86400);
+        }
+        return $result;
+    }
+
+    public function clear_cache_taxonomy($term_id = false, $tt_id = false, $taxonomy_name) {
+        wp_cache_delete('wpuposttypestaxos_count_terms_' . $taxonomy_name);
     }
 
     /* ----------------------------------------------------------

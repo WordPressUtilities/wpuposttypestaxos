@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.13.2
+Version: 0.14.0
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.13.2';
+    private $plugin_version = '0.14.0';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -44,6 +44,7 @@ class wputh_add_post_types_taxonomies {
         'y',
         'h'
     );
+    private $post_types_without_adjacent = array();
 
     public function __construct() {
         add_action('plugins_loaded', array(&$this,
@@ -69,6 +70,9 @@ class wputh_add_post_types_taxonomies {
         ), 10, 3);
         add_action('delete_term', array(&$this,
             'clear_cache_taxonomy'
+        ), 10, 3);
+        add_action('template_redirect', array(&$this,
+            'template_redirect'
         ), 10, 3);
 
         if (is_admin()) {
@@ -140,6 +144,11 @@ class wputh_add_post_types_taxonomies {
                 $args['rewrite'] = false;
                 $args['exclude_from_search'] = true;
             }
+
+            if (!isset($post_type['keep_adjacents_links_head'])) {
+                $this->post_types_without_adjacent[] = $slug;
+            }
+            unset($post_type['keep_adjacents_links_head']);
 
             // Default label: slug
             if (!isset($post_type['name'])) {
@@ -546,6 +555,22 @@ class wputh_add_post_types_taxonomies {
         $p1 = array_splice($array, $from, 1);
         $p2 = array_splice($array, 0, $to);
         $array = array_merge($p2, $p1, $array);
+    }
+
+    /* ----------------------------------------------------------
+      Front
+    ---------------------------------------------------------- */
+
+    public function template_redirect() {
+        if (!is_singular()) {
+            return;
+        }
+        $post_type = get_post_type();
+        /* Remove adjacent meta links if useless */
+        if (in_array($post_type, $this->post_types_without_adjacent)) {
+            remove_action('wp_head', 'wp_shortlink_wp_head');
+            remove_action('wp_head', 'adjacent_posts_rel_link_wp_head');
+        }
     }
 
     /* ----------------------------------------------------------

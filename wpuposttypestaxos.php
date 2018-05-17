@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.14.0
+Version: 0.14.1
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.14.0';
+    private $plugin_version = '0.14.1';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -290,17 +290,26 @@ class wputh_add_post_types_taxonomies {
                 'menu_name' => ucfirst($plural)
             );
 
-            $args['labels']['search_items'] = sprintf(_x('Search %s', 'male', 'wpuposttypestaxos'), strtolower($singular));
+            $taxo_name = strtolower($singular);
+
+            $args['labels']['search_items'] = sprintf(_x('Search %s', 'male', 'wpuposttypestaxos'), $taxo_name);
             $args['labels']['popular_items'] = ucfirst(strtolower(sprintf(_x('Popular %s', 'male', 'wpuposttypestaxos'), $plural)));
             $args['labels']['all_items'] = sprintf(_x('All %s', 'male', 'wpuposttypestaxos'), strtolower($plural));
-            $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'male', 'wpuposttypestaxos'), strtolower($singular));
-            $args['labels']['update_item'] = sprintf(_x('Update %s', 'male', 'wpuposttypestaxos'), strtolower($singular));
-            $args['labels']['add_new_item'] = sprintf(_x('Add New %s', 'male', 'wpuposttypestaxos'), strtolower($singular));
-            $args['labels']['new_item_name'] = sprintf(_x('New %s Name', 'male', 'wpuposttypestaxos'), strtolower($singular));
+            $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'male', 'wpuposttypestaxos'), $taxo_name);
+            $args['labels']['update_item'] = sprintf(_x('Update %s', 'male', 'wpuposttypestaxos'), $taxo_name);
+            $args['labels']['add_new_item'] = sprintf(_x('Add New %s', 'male', 'wpuposttypestaxos'), $taxo_name);
+            $args['labels']['new_item_name'] = sprintf(_x('New %s Name', 'male', 'wpuposttypestaxos'), $taxo_name);
             $args['labels']['separate_items_with_commas'] = sprintf(_x('Separate %s with commas', 'male', 'wpuposttypestaxos'), strtolower($plural));
             $args['labels']['add_or_remove_items'] = sprintf(_x('Add or remove %s', 'male', 'wpuposttypestaxos'), strtolower($plural));
             $args['labels']['choose_from_most_used'] = sprintf(_x('Choose from the most used %s', 'male', 'wpuposttypestaxos'), strtolower($plural));
-            $args['labels']['not_found'] = sprintf(_x('No %s found.', 'male', 'wpuposttypestaxos'), strtolower($singular));
+            $args['labels']['not_found'] = sprintf(_x('No %s found.', 'male', 'wpuposttypestaxos'), $taxo_name);
+
+            // Allow correct translations for post types with a name starting with a consonant
+            $first_letter = $taxo_name[0];
+            if (!in_array($first_letter, $this->non_consonants)) {
+                $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'male_consonant', 'wpuposttypestaxos'), $taxo_name);
+                $args['labels']['update_item'] = sprintf(_x('Update %s', 'male_consonant', 'wpuposttypestaxos'), $taxo_name);
+            }
 
             if ($context == 'female') {
                 $args['labels']['search_items'] = sprintf(_x('Search %s', 'female', 'wpuposttypestaxos'), strtolower($singular));

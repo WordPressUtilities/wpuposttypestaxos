@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.14.1
+Version: 0.15.0
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.14.1';
+    private $plugin_version = '0.15.0';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -48,10 +48,16 @@ class wputh_add_post_types_taxonomies {
 
     public function __construct() {
         add_action('plugins_loaded', array(&$this,
+            'autoupdate'
+        ));
+        add_action('plugins_loaded', array(&$this,
             'load_plugin_textdomain'
         ));
         add_action('init', array(&$this,
             'add_post_types'
+        ));
+        add_action('post_updated_messages', array(&$this,
+            'post_updated_messages'
         ));
         add_action('init', array(&$this,
             'add_taxonomies'
@@ -98,6 +104,14 @@ class wputh_add_post_types_taxonomies {
                 'admin_style'
             ));
         }
+    }
+
+    public function autoupdate(){
+        include dirname( __FILE__ ) . '/inc/WPUBaseUpdate/WPUBaseUpdate.php';
+        $this->settings_update = new \wpuposttypestaxos\WPUBaseUpdate(
+            'WordPressUtilities',
+            'wpuposttypestaxos',
+            $this->plugin_version);
     }
 
     public function admin_style() {
@@ -200,6 +214,7 @@ class wputh_add_post_types_taxonomies {
             }
 
             $post_type_name = strtolower($post_type['name']);
+            $post_type_name_u = ucfirst($post_type_name);
             $post_type_plural = strtolower($post_type['plural']);
 
             // Labels
@@ -216,7 +231,15 @@ class wputh_add_post_types_taxonomies {
                 'not_found' => sprintf(_x('No %s found', 'male', 'wpuposttypestaxos'), $post_type_name),
                 'not_found_in_trash' => sprintf(_x('No %s found in Trash', 'male', 'wpuposttypestaxos'), $post_type_name),
                 'parent_item_colon' => '',
-                'menu_name' => ucfirst($post_type['plural'])
+                'menu_name' => ucfirst($post_type['plural']),
+                'item_published' => sprintf(_x('%s published.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
+                'item_published_privately' => sprintf(_x('%s published privately.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
+                'item_reverted_to_draft' => sprintf(_x('%s reverted to draft.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
+                'item_scheduled' => sprintf(_x('%s scheduled.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
+                'item_updated' => sprintf(_x('%s updated.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
+                'item_saved' => sprintf(_x('%s saved.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
+                'item_submitted' => sprintf(_x('%s submitted.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
+                'item_preview' => sprintf(_x('Preview %s', 'male', 'wpuposttypestaxos'), $post_type_name)
             );
 
             // Allow correct translations for post types with a name starting with a consonant
@@ -224,6 +247,7 @@ class wputh_add_post_types_taxonomies {
             if (!in_array($first_letter, $this->non_consonants)) {
                 $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'male_consonant', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['view_item'] = sprintf(_x('View %s', 'male_consonant', 'wpuposttypestaxos'), $post_type_name);
+                $args['labels']['item_preview'] = sprintf(_x('Preview %s', 'male_consonant', 'wpuposttypestaxos'), $post_type_name);
             }
 
             // I couldn't use the content of $context var inside of _x() calls because of Poedit :(
@@ -236,6 +260,14 @@ class wputh_add_post_types_taxonomies {
                 $args['labels']['search_items'] = sprintf(_x('Search %s', 'female', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['not_found'] = sprintf(_x('No %s found', 'female', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['not_found_in_trash'] = sprintf(_x('No %s found in Trash', 'female', 'wpuposttypestaxos'), $post_type_name);
+                $args['labels']['item_published'] = sprintf(_x('%s published.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
+                $args['labels']['item_published_privately'] = sprintf(_x('%s published privately.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
+                $args['labels']['item_reverted_to_draft'] = sprintf(_x('%s reverted to draft.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
+                $args['labels']['item_scheduled'] = sprintf(_x('%s scheduled.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
+                $args['labels']['item_updated'] = sprintf(_x('%s updated.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
+                $args['labels']['item_saved'] = sprintf(_x('%s saved.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
+                $args['labels']['item_submitted'] = sprintf(_x('%s submitted.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
+                $args['labels']['item_preview'] = sprintf(_x('Preview %s', 'female', 'wpuposttypestaxos'), $post_type_name);
             }
 
             if (isset($post_type['labels']) && is_array($post_type['labels'])) {
@@ -244,6 +276,31 @@ class wputh_add_post_types_taxonomies {
 
             register_post_type($slug, $args);
         }
+
+    }
+
+    public function post_updated_messages($messages) {
+        foreach ($this->post_types as $slug => $post_type) {
+            if (!isset($messages[$slug])) {
+                $messages[$slug] = $messages['post'];
+                $pt = get_post_type_object($slug);
+                foreach ($messages[$slug] as &$message) {
+                    if ($message) {
+                        $message = str_replace(__('Post published.'), $pt->labels->item_published, $message);
+                        $message = str_replace(__('Post updated.'), $pt->labels->item_updated, $message);
+                        $message = str_replace(__('Post submitted.'), $pt->labels->item_submitted, $message);
+                        $message = str_replace(__('Post saved.'), $pt->labels->item_saved, $message);
+                        $message = str_replace(__('View post'), $pt->labels->view_item, $message);
+                        $message = str_replace(__('Post'), $pt->labels->singular_name, $message);
+                        $message = str_replace(__( 'Preview post' ), $pt->labels->item_preview, $message);
+                        if ($post_type['female']) {
+                            $message = str_replace(_x('scheduled', 'male', 'wpuposttypestaxos'), _x('scheduled', 'female', 'wpuposttypestaxos'), $message);
+                        }
+                    }
+                }
+            }
+        }
+        return $messages;
     }
 
     /* ----------------------------------------------------------

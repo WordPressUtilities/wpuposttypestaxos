@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.15.0
+Version: 0.15.1
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.15.0';
+    private $plugin_version = '0.15.1';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -216,6 +216,7 @@ class wputh_add_post_types_taxonomies {
             $post_type_name = strtolower($post_type['name']);
             $post_type_name_u = ucfirst($post_type_name);
             $post_type_plural = strtolower($post_type['plural']);
+            $post_type_plural_u = ucfirst($post_type_plural);
 
             // Labels
             $args['labels'] = array(
@@ -227,6 +228,7 @@ class wputh_add_post_types_taxonomies {
                 'new_item' => sprintf(_x('New %s', 'male', 'wpuposttypestaxos'), $post_type_name),
                 'all_items' => sprintf(_x('All %s', 'male', 'wpuposttypestaxos'), $post_type_plural),
                 'view_item' => sprintf(_x('View %s', 'male', 'wpuposttypestaxos'), $post_type_name),
+                'view_items' => sprintf(_x('View %s', 'maleplural', 'wpuposttypestaxos'), $post_type_plural),
                 'search_items' => sprintf(_x('Search %s', 'male', 'wpuposttypestaxos'), $post_type_name),
                 'not_found' => sprintf(_x('No %s found', 'male', 'wpuposttypestaxos'), $post_type_name),
                 'not_found_in_trash' => sprintf(_x('No %s found in Trash', 'male', 'wpuposttypestaxos'), $post_type_name),
@@ -257,6 +259,7 @@ class wputh_add_post_types_taxonomies {
                 $args['labels']['new_item'] = sprintf(_x('New %s', 'female', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['all_items'] = sprintf(_x('All %s', 'female', 'wpuposttypestaxos'), $post_type_plural);
                 $args['labels']['view_item'] = sprintf(_x('View %s', 'female', 'wpuposttypestaxos'), $post_type_name);
+                $args['labels']['view_items'] = sprintf(_x('View %s', 'femaleplural', 'wpuposttypestaxos'), $post_type_plural);
                 $args['labels']['search_items'] = sprintf(_x('Search %s', 'female', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['not_found'] = sprintf(_x('No %s found', 'female', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['not_found_in_trash'] = sprintf(_x('No %s found in Trash', 'female', 'wpuposttypestaxos'), $post_type_name);

@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.15.1
+Version: 0.15.2
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.15.1';
+    private $plugin_version = '0.15.2';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -237,6 +237,7 @@ class wputh_add_post_types_taxonomies {
                 'item_published' => sprintf(_x('%s published.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
                 'item_published_privately' => sprintf(_x('%s published privately.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
                 'item_reverted_to_draft' => sprintf(_x('%s reverted to draft.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
+                'item_draft_updated' => sprintf(_x('%s draft updated.', 'male', 'wpuposttypestaxos'), $post_type_name),
                 'item_scheduled' => sprintf(_x('%s scheduled.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
                 'item_updated' => sprintf(_x('%s updated.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
                 'item_saved' => sprintf(_x('%s saved.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
@@ -250,6 +251,7 @@ class wputh_add_post_types_taxonomies {
                 $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'male_consonant', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['view_item'] = sprintf(_x('View %s', 'male_consonant', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['item_preview'] = sprintf(_x('Preview %s', 'male_consonant', 'wpuposttypestaxos'), $post_type_name);
+                $args['labels']['item_draft_updated'] = sprintf(_x('%s draft updated', 'male_consonant', 'wpuposttypestaxos'), $post_type_name);
             }
 
             // I couldn't use the content of $context var inside of _x() calls because of Poedit :(
@@ -266,6 +268,7 @@ class wputh_add_post_types_taxonomies {
                 $args['labels']['item_published'] = sprintf(_x('%s published.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
                 $args['labels']['item_published_privately'] = sprintf(_x('%s published privately.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
                 $args['labels']['item_reverted_to_draft'] = sprintf(_x('%s reverted to draft.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
+                $args['labels']['item_draft_updated'] = sprintf(_x('%s draft updated.', 'female', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['item_scheduled'] = sprintf(_x('%s scheduled.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
                 $args['labels']['item_updated'] = sprintf(_x('%s updated.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
                 $args['labels']['item_saved'] = sprintf(_x('%s saved.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
@@ -293,6 +296,7 @@ class wputh_add_post_types_taxonomies {
                         $message = str_replace(__('Post updated.'), $pt->labels->item_updated, $message);
                         $message = str_replace(__('Post submitted.'), $pt->labels->item_submitted, $message);
                         $message = str_replace(__('Post saved.'), $pt->labels->item_saved, $message);
+                        $message = str_replace(__('Post draft updated.'), $pt->labels->item_draft_updated, $message);
                         $message = str_replace(__('View post'), $pt->labels->view_item, $message);
                         $message = str_replace(__('Post'), $pt->labels->singular_name, $message);
                         $message = str_replace(__( 'Preview post' ), $pt->labels->item_preview, $message);

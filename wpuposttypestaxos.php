@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.15.3
+Version: 0.15.4
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.15.3';
+    private $plugin_version = '0.15.4';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -549,7 +549,9 @@ class wputh_add_post_types_taxonomies {
     }
 
     public function clear_cache_posttype($post_id) {
-        wp_cache_delete('wpuposttypestaxos_count_posts_' . get_post_type($post_id));
+        $post_type = get_post_type($post_id);
+        wp_cache_delete('wpuposttypestaxos_count_posts_' . $post_type);
+        $this->wp_count_posts($post_type);
     }
 
     /* Terms Count
@@ -567,6 +569,7 @@ class wputh_add_post_types_taxonomies {
 
     public function clear_cache_taxonomy($term_id = false, $tt_id = false, $taxonomy_name) {
         wp_cache_delete('wpuposttypestaxos_count_terms_' . $taxonomy_name);
+        $this->wp_count_terms($taxonomy_name);
     }
 
     /* ----------------------------------------------------------

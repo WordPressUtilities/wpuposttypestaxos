@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WPU Options\n"
-"POT-Creation-Date: 2019-01-16 21:38+0100\n"
+"POT-Creation-Date: 2019-02-12 23:06+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Darklg <darklg.blog@gmail.com>\n"
 "Language-Team: \n"
@@ -401,7 +401,7 @@ msgctxt "male-none"
 msgid "No"
 msgstr "Aucun"
 
-#: .././wpuposttypestaxos.php:668
+#: .././wpuposttypestaxos.php:671
 msgid "Add Media"
 msgstr "Ajouter un Media"
 

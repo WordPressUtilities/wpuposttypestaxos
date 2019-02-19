@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.15.4
+Version: 0.15.5
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +13,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.15.4';
+    private $plugin_version = '0.15.5';
     private $values_array = array(
         'supports',
         'taxonomies'
@@ -91,12 +91,6 @@ class wputh_add_post_types_taxonomies {
             add_action('dashboard_glance_items', array(&$this,
                 'add_dashboard_glance_items'
             ));
-            add_filter('manage_posts_columns', array(&$this,
-                'columns_head_taxo'
-            ), 10, 1);
-            add_action('manage_posts_custom_column', array(&$this,
-                'columns_content_taxo'
-            ), 10, 2);
             add_action('admin_init', array(&$this,
                 'add_editor_styles'
             ));
@@ -106,8 +100,8 @@ class wputh_add_post_types_taxonomies {
         }
     }
 
-    public function autoupdate(){
-        include dirname( __FILE__ ) . '/inc/WPUBaseUpdate/WPUBaseUpdate.php';
+    public function autoupdate() {
+        include dirname(__FILE__) . '/inc/WPUBaseUpdate/WPUBaseUpdate.php';
         $this->settings_update = new \wpuposttypestaxos\WPUBaseUpdate(
             'WordPressUtilities',
             'wpuposttypestaxos',
@@ -300,7 +294,7 @@ class wputh_add_post_types_taxonomies {
                         $message = str_replace(__('Post draft updated.'), $pt->labels->item_draft_updated, $message);
                         $message = str_replace(__('View post'), $pt->labels->view_item, $message);
                         $message = str_replace(__('Post'), $pt->labels->singular_name, $message);
-                        $message = str_replace(__( 'Preview post' ), $pt->labels->item_preview, $message);
+                        $message = str_replace(__('Preview post'), $pt->labels->item_preview, $message);
                         if ($post_type['female']) {
                             $message = str_replace(_x('scheduled', 'male', 'wpuposttypestaxos'), _x('scheduled', 'female', 'wpuposttypestaxos'), $message);
                         }
@@ -329,14 +323,21 @@ class wputh_add_post_types_taxonomies {
 
             $args = array(
                 'label' => $plural,
+                'show_in_rest' => TRUE,
                 'rewrite' => array(
                     'slug' => $slug
                 ),
                 'hierarchical' => $taxo['hierarchical']
             );
 
+            if ($taxo['admin_column']) {
+                $args['show_admin_column'] = true;
+            }
+
             // Hide only in front
             if ($taxo['wputh__hide_front']) {
+                $args['public'] = false;
+                $args['show_in_rest'] = false;
                 $args['rewrite'] = array(
                     'with_front' => false
                 );
@@ -432,56 +433,6 @@ class wputh_add_post_types_taxonomies {
             $taxonomies[$slug]['admin_column'] = isset($taxo['admin_column']) ? $taxo['admin_column'] : true;
         }
         return $taxonomies;
-    }
-
-    /* ----------------------------------------------------------
-      Add taxonomy columns
-    ---------------------------------------------------------- */
-
-    public function columns_head_taxo($defaults) {
-        global $post;
-
-        // Isolate latest value
-        $last_key = key(array_slice($defaults, -1, 1, TRUE));
-        $last_value = $defaults[$last_key];
-        unset($defaults[$last_key]);
-
-        foreach ($this->taxonomies as $slug => $taxo) {
-
-            // Add keys
-            if ($taxo['admin_column'] && isset($post->post_type) && in_array($post->post_type, $taxo['post_type'])) {
-                $defaults[$slug] = $taxo['name'];
-            }
-        }
-
-        // Add latest value
-        $defaults[$last_key] = $last_value;
-        return $defaults;
-    }
-
-    public function columns_content_taxo($column_name, $post_id) {
-        global $post;
-        if (!isset($post->post_type)) {
-            return;
-        }
-
-        foreach ($this->taxonomies as $slug => $taxo) {
-            if ($column_name == $slug && in_array($post->post_type, $taxo['post_type'])) {
-                $terms = wp_get_post_terms($post_id, $slug);
-                $content_term = array();
-                if (is_array($terms)) {
-                    foreach ($terms as $term) {
-                        $content_term[] = '<a href="' . admin_url('edit.php?post_type=' . $post->post_type . '&' . $slug . '=' . $term->slug) . '">' . $term->name . '</a>';
-                    }
-                }
-                if (empty($content_term)) {
-                    $content_term = array(
-                        '-'
-                    );
-                }
-                echo implode(', ', $content_term);
-            }
-        }
     }
 
     /* ----------------------------------------------------------

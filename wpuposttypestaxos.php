@@ -3,7 +3,7 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Description: Load custom post types & taxonomies
-Version: 0.15.5
+Version: 0.15.6
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,17 +13,19 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.15.5';
-    private $values_array = array(
+    private $plugin_version = '0.15.6';
+
+    /* Post types */
+    private $pt__values_array = array(
         'supports',
         'taxonomies'
     );
-    private $values_text = array(
+    private $pt__values_text = array(
         'show_in_menu',
         'menu_position',
         'menu_icon'
     );
-    private $values_bool = array(
+    private $pt__values_bool = array(
         'can_export',
         'exclude_from_search',
         'has_archive',
@@ -35,6 +37,15 @@ class wputh_add_post_types_taxonomies {
         'show_ui',
         'with_front'
     );
+
+    /* Taxos */
+    private $tax__values_bool = array(
+        'admin_column',
+        'hierarchical',
+        'public',
+        'show_in_rest',
+    );
+
     private $non_consonants = array(
         'a',
         'e',
@@ -179,7 +190,7 @@ class wputh_add_post_types_taxonomies {
             }
 
             // Add array values
-            foreach ($this->values_array as $val_name) {
+            foreach ($this->pt__values_array as $val_name) {
                 if (isset($post_type[$val_name])) {
                     if (!is_array($post_type[$val_name])) {
                         $post_type[$val_name] = array($post_type[$val_name]);
@@ -195,14 +206,14 @@ class wputh_add_post_types_taxonomies {
             }
 
             // Add boolean values
-            foreach ($this->values_bool as $val_name) {
+            foreach ($this->pt__values_bool as $val_name) {
                 if (isset($post_type[$val_name]) && is_bool($post_type[$val_name])) {
                     $args[$val_name] = $post_type[$val_name];
                 }
             }
 
             // Add text values
-            foreach ($this->values_text as $val_name) {
+            foreach ($this->pt__values_text as $val_name) {
                 if (isset($post_type[$val_name]) && !empty($post_type[$val_name])) {
                     $args[$val_name] = $post_type[$val_name];
                 }
@@ -323,15 +334,18 @@ class wputh_add_post_types_taxonomies {
 
             $args = array(
                 'label' => $plural,
-                'show_in_rest' => TRUE,
+                'public' => true,
+                'admin_column' => false,
+                'show_in_rest' => true,
                 'rewrite' => array(
                     'slug' => $slug
                 ),
-                'hierarchical' => $taxo['hierarchical']
             );
 
-            if ($taxo['admin_column']) {
-                $args['show_admin_column'] = true;
+            foreach ($this->tax__values_bool as $val_name) {
+                if (isset($taxo[$val_name]) && is_bool($taxo[$val_name])) {
+                    $args[$val_name] = $taxo[$val_name];
+                }
             }
 
             // Hide only in front

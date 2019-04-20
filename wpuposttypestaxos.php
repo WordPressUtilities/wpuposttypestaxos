@@ -2,8 +2,9 @@
 
 /*
 Plugin Name: WPU Post types & taxonomies
+Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.15.6
+Version: 0.15.7
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -13,7 +14,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.15.6';
+    private $plugin_version = '0.15.7';
 
     /* Post types */
     private $pt__values_array = array(
@@ -40,7 +41,7 @@ class wputh_add_post_types_taxonomies {
 
     /* Taxos */
     private $tax__values_bool = array(
-        'admin_column',
+        'show_admin_column',
         'hierarchical',
         'public',
         'show_in_rest',
@@ -335,7 +336,7 @@ class wputh_add_post_types_taxonomies {
             $args = array(
                 'label' => $plural,
                 'public' => true,
-                'admin_column' => false,
+                'show_admin_column' => false,
                 'show_in_rest' => true,
                 'rewrite' => array(
                     'slug' => $slug
@@ -444,7 +445,7 @@ class wputh_add_post_types_taxonomies {
             $taxonomies[$slug]['post_type'] = $post_type;
             $taxonomies[$slug]['wputh__hide_front'] = (isset($taxo['wputh__hide_front']) && is_bool($taxo['wputh__hide_front'])) ? $taxo['wputh__hide_front'] : false;
             $taxonomies[$slug]['hierarchical'] = isset($taxo['hierarchical']) ? $taxo['hierarchical'] : true;
-            $taxonomies[$slug]['admin_column'] = isset($taxo['admin_column']) ? $taxo['admin_column'] : true;
+            $taxonomies[$slug]['show_admin_column'] = isset($taxo['show_admin_column']) ? $taxo['show_admin_column'] : true;
         }
         return $taxonomies;
     }

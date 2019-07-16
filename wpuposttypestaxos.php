@@ -4,7 +4,7 @@
 Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.15.7
+Version: 0.16.0
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -14,7 +14,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.15.7';
+    private $plugin_version = '0.16.0';
 
     /* Post types */
     private $pt__values_array = array(
@@ -44,12 +44,16 @@ class wputh_add_post_types_taxonomies {
         'show_admin_column',
         'hierarchical',
         'public',
-        'show_in_rest',
+        'show_in_rest'
     );
 
     private $non_consonants = array(
         'a',
         'e',
+        'è',
+        'È',
+        'é',
+        'É',
         'i',
         'o',
         'u',
@@ -172,7 +176,7 @@ class wputh_add_post_types_taxonomies {
 
             // Default label: slug
             if (!isset($post_type['name'])) {
-                $post_type['name'] = ucfirst($slug);
+                $post_type['name'] = $this->ucfirst($slug);
             }
             $args['name'] = $post_type['name'];
 
@@ -221,14 +225,14 @@ class wputh_add_post_types_taxonomies {
             }
 
             $post_type_name = strtolower($post_type['name']);
-            $post_type_name_u = ucfirst($post_type_name);
+            $post_type_name_u = $this->ucfirst($post_type_name);
             $post_type_plural = strtolower($post_type['plural']);
-            $post_type_plural_u = ucfirst($post_type_plural);
+            $post_type_plural_u = $this->ucfirst($post_type_plural);
 
             // Labels
             $args['labels'] = array(
-                'name' => ucfirst($post_type['plural']),
-                'singular_name' => ucfirst($post_type['name']),
+                'name' => $this->ucfirst($post_type['plural']),
+                'singular_name' => $this->ucfirst($post_type['name']),
                 'add_new' => __('Add New', 'wpuposttypestaxos'),
                 'add_new_item' => sprintf(_x('Add New %s', 'male', 'wpuposttypestaxos'), $post_type_name),
                 'edit_item' => sprintf(_x('Edit %s', 'male', 'wpuposttypestaxos'), $post_type_name),
@@ -240,7 +244,7 @@ class wputh_add_post_types_taxonomies {
                 'not_found' => sprintf(_x('No %s found', 'male', 'wpuposttypestaxos'), $post_type_name),
                 'not_found_in_trash' => sprintf(_x('No %s found in Trash', 'male', 'wpuposttypestaxos'), $post_type_name),
                 'parent_item_colon' => '',
-                'menu_name' => ucfirst($post_type['plural']),
+                'menu_name' => $this->ucfirst($post_type['plural']),
                 'item_published' => sprintf(_x('%s published.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
                 'item_published_privately' => sprintf(_x('%s published privately.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
                 'item_reverted_to_draft' => sprintf(_x('%s reverted to draft.', 'male', 'wpuposttypestaxos'), $post_type_name_u),
@@ -253,7 +257,8 @@ class wputh_add_post_types_taxonomies {
             );
 
             // Allow correct translations for post types with a name starting with a consonant
-            $first_letter = $post_type_name[0];
+            $letters = str_split(utf8_decode($post_type_name));
+            $first_letter = utf8_encode($letters[0]);
             if (!in_array($first_letter, $this->non_consonants)) {
                 $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'male_consonant', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['view_item'] = sprintf(_x('View %s', 'male_consonant', 'wpuposttypestaxos'), $post_type_name);
@@ -340,7 +345,7 @@ class wputh_add_post_types_taxonomies {
                 'show_in_rest' => true,
                 'rewrite' => array(
                     'slug' => $slug
-                ),
+                )
             );
 
             foreach ($this->tax__values_bool as $val_name) {
@@ -366,15 +371,15 @@ class wputh_add_post_types_taxonomies {
             }
 
             $args['labels'] = array(
-                'name' => ucfirst($plural),
+                'name' => $this->ucfirst($plural),
                 'singular_name' => $singular,
-                'menu_name' => ucfirst($plural)
+                'menu_name' => $this->ucfirst($plural)
             );
 
             $taxo_name = strtolower($singular);
 
             $args['labels']['search_items'] = sprintf(_x('Search %s', 'male', 'wpuposttypestaxos'), $taxo_name);
-            $args['labels']['popular_items'] = ucfirst(strtolower(sprintf(_x('Popular %s', 'male', 'wpuposttypestaxos'), $plural)));
+            $args['labels']['popular_items'] = $this->ucfirst(strtolower(sprintf(_x('Popular %s', 'male', 'wpuposttypestaxos'), $plural)));
             $args['labels']['all_items'] = sprintf(_x('All %s', 'male', 'wpuposttypestaxos'), strtolower($plural));
             $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'male', 'wpuposttypestaxos'), $taxo_name);
             $args['labels']['update_item'] = sprintf(_x('Update %s', 'male', 'wpuposttypestaxos'), $taxo_name);
@@ -394,7 +399,7 @@ class wputh_add_post_types_taxonomies {
 
             if ($context == 'female') {
                 $args['labels']['search_items'] = sprintf(_x('Search %s', 'female', 'wpuposttypestaxos'), strtolower($singular));
-                $args['labels']['popular_items'] = ucfirst(strtolower(sprintf(_x('Popular %s', 'female', 'wpuposttypestaxos'), $plural)));
+                $args['labels']['popular_items'] = $this->ucfirst(strtolower(sprintf(_x('Popular %s', 'female', 'wpuposttypestaxos'), $plural)));
                 $args['labels']['all_items'] = sprintf(_x('All %s', 'female', 'wpuposttypestaxos'), strtolower($plural));
                 $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'female', 'wpuposttypestaxos'), strtolower($singular));
                 $args['labels']['update_item'] = sprintf(_x('Update %s', 'female', 'wpuposttypestaxos'), strtolower($singular));
@@ -614,6 +619,14 @@ class wputh_add_post_types_taxonomies {
             remove_action('wp_head', 'wp_shortlink_wp_head');
             remove_action('wp_head', 'adjacent_posts_rel_link_wp_head');
         }
+    }
+
+    /* ----------------------------------------------------------
+      Ucfirst
+    ---------------------------------------------------------- */
+
+    public function ucfirst($string) {
+        return mb_strtoupper(mb_substr($string, 0, 1)) . mb_substr($string, 1);
     }
 
     /* ----------------------------------------------------------

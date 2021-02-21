@@ -4,7 +4,7 @@
 Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.16.1
+Version: 0.16.2
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -14,17 +14,20 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.16.1';
+    private $plugin_version = '0.16.2';
 
     /* Post types */
     private $pt__values_array = array(
         'supports',
         'taxonomies'
     );
+    private $pt__values_var = array(
+        'rewrite'
+    );
     private $pt__values_text = array(
         'show_in_menu',
         'menu_position',
-        'menu_icon'
+        'menu_icon',
     );
     private $pt__values_bool = array(
         'can_export',
@@ -35,7 +38,6 @@ class wputh_add_post_types_taxonomies {
         'publicly_queryable',
         'show_in_nav_menus',
         'query_var',
-        'rewrite',
         'show_ui',
         'with_front'
     );
@@ -221,6 +223,13 @@ class wputh_add_post_types_taxonomies {
 
             // Add text values
             foreach ($this->pt__values_text as $val_name) {
+                if (isset($post_type[$val_name]) && !empty($post_type[$val_name])) {
+                    $args[$val_name] = $post_type[$val_name];
+                }
+            }
+
+            // Add various values
+            foreach ($this->pt__values_var as $val_name) {
                 if (isset($post_type[$val_name]) && !empty($post_type[$val_name])) {
                     $args[$val_name] = $post_type[$val_name];
                 }

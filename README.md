@@ -22,6 +22,7 @@ function wputh_set_theme_posttypes($post_types) {
 add_filter('wputh_get_taxonomies', 'wputh_set_theme_taxonomies');
 function wputh_set_theme_taxonomies($taxonomies) {
     $taxonomies['work-type'] = array(
+        'wpu_public_archive' => true,
         'name' => __( 'Work type', 'wputh' ),
         'post_type' => 'work'
     );

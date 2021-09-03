@@ -4,7 +4,7 @@
 Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.16.3
+Version: 0.17.0
 Author: Darklg
 Author URI: http://darklg.me/
 License: MIT License
@@ -14,7 +14,7 @@ License URI: http://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.16.3';
+    private $plugin_version = '0.17.0';
 
     /* Post types */
     private $pt__values_array = array(
@@ -99,6 +99,9 @@ class wputh_add_post_types_taxonomies {
         add_action('template_redirect', array(&$this,
             'template_redirect'
         ), 10, 3);
+        add_action('wp_link_query', array(&$this,
+            'wp_link_query'
+        ), 10, 2);
 
         if (is_admin()) {
             add_action('admin_menu', array(&$this,
@@ -619,6 +622,45 @@ class wputh_add_post_types_taxonomies {
         $p1 = array_splice($array, $from, 1);
         $p2 = array_splice($array, 0, $to);
         $array = array_merge($p2, $p1, $array);
+    }
+
+    /* ----------------------------------------------------------
+      Search
+    ---------------------------------------------------------- */
+
+    public function wp_link_query($results, $query) {
+
+        $taxonomies_search = apply_filters('wputh_get_taxonomies', array());
+
+        /* All results are displayed at first call so we have to block the paging action */
+        if (isset($query['offset']) && $query['offset'] > 0) {
+            $taxonomies_search = array();
+        }
+        foreach ($taxonomies_search as $tax_id => $tax_infos) {
+            /* Prevent invalid taxonomies */
+            if (!isset($tax_infos['name'], $tax_infos['wpu_public_archive'])) {
+                continue;
+            }
+            /* Prevent non public taxonomies */
+            if (!$tax_infos['wpu_public_archive']) {
+                continue;
+            }
+            $terms = get_terms(array(
+                'taxonomy' => array($tax_id),
+                'hide_empty' => false,
+                'fields' => 'all',
+                'name__like' => $query['s']
+            ));
+            foreach ($terms as $term) {
+                $results[] = array(
+                    'ID' => false,
+                    'title' => $term->name,
+                    'permalink' => get_term_link($term),
+                    'info' => $tax_infos['name']
+                );
+            }
+        }
+        return $results;
     }
 
     /* ----------------------------------------------------------

@@ -4,17 +4,17 @@
 Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.17.0
+Version: 0.17.1
 Author: Darklg
-Author URI: http://darklg.me/
+Author URI: https://darklg.me/
 License: MIT License
-License URI: http://opensource.org/licenses/MIT
+License URI: https://opensource.org/licenses/MIT
 */
 
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.17.0';
+    private $plugin_version = '0.17.1';
 
     /* Post types */
     private $pt__values_array = array(
@@ -47,7 +47,10 @@ class wputh_add_post_types_taxonomies {
         'show_admin_column',
         'hierarchical',
         'public',
-        'show_in_rest'
+        'show_in_rest',
+        'rewrite',
+        'show_ui',
+        'publicly_queryable'
     );
 
     private $non_consonants = array(
@@ -377,9 +380,9 @@ class wputh_add_post_types_taxonomies {
             if ($taxo['wputh__hide_front']) {
                 $args['public'] = false;
                 $args['show_in_rest'] = false;
-                $args['rewrite'] = array(
-                    'with_front' => false
-                );
+                $args['show_in_menu'] = true;
+                $args['show_ui'] = true;
+                $args['rewrite'] = false;
             }
 
             // Female

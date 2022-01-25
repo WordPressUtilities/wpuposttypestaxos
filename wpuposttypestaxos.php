@@ -4,7 +4,7 @@
 Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.17.1
+Version: 0.17.2
 Author: Darklg
 Author URI: https://darklg.me/
 License: MIT License
@@ -14,7 +14,7 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.17.1';
+    private $plugin_version = '0.17.2';
 
     /* Post types */
     private $pt__values_array = array(
@@ -303,6 +303,10 @@ class wputh_add_post_types_taxonomies {
                 $args['labels']['item_saved'] = sprintf(_x('%s saved.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
                 $args['labels']['item_submitted'] = sprintf(_x('%s submitted.', 'female', 'wpuposttypestaxos'), $post_type_name_u);
                 $args['labels']['item_preview'] = sprintf(_x('Preview %s', 'female', 'wpuposttypestaxos'), $post_type_name);
+                if (in_array($first_letter, $this->non_consonants)) {
+                    $args['labels']['item_preview'] = sprintf(_x('Preview %s', 'female_nonconsonant', 'wpuposttypestaxos'), $post_type_name);
+                    $args['labels']['item_draft_updated'] = sprintf(_x('%s draft updated', 'female_nonconsonant', 'wpuposttypestaxos'), $post_type_name);
+                }
             }
 
             if (isset($post_type['labels']) && is_array($post_type['labels'])) {

@@ -3,8 +3,9 @@
 /*
 Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
+Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.17.3
+Version: 0.18.0
 Author: Darklg
 Author URI: https://darklg.me/
 License: MIT License
@@ -14,7 +15,7 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.17.3';
+    private $plugin_version = '0.18.0';
 
     /* Post types */
     private $pt__values_array = array(
@@ -105,6 +106,9 @@ class wputh_add_post_types_taxonomies {
         add_action('wp_link_query', array(&$this,
             'wp_link_query'
         ), 10, 2);
+        add_action('restrict_manage_posts', array(&$this,
+            'restrict_manage_posts'
+        ), 10);
 
         if (is_admin()) {
             add_action('admin_menu', array(&$this,
@@ -692,6 +696,41 @@ class wputh_add_post_types_taxonomies {
 
     public function ucfirst($string) {
         return mb_strtoupper(mb_substr($string, 0, 1)) . mb_substr($string, 1);
+    }
+
+    /* ----------------------------------------------------------
+      Filter taxonomies in admin list
+    ---------------------------------------------------------- */
+
+    function restrict_manage_posts() {
+        $taxonomies = apply_filters('wputh_get_taxonomies', array());
+        $this->taxonomies = $this->verify_taxonomies($taxonomies);
+        $pt = get_post_type();
+        foreach ($this->taxonomies as $tax_id => $tax) {
+            if (!isset($tax['wputh__admin_filter']) || !$tax['wputh__admin_filter']) {
+                continue;
+            }
+            if (!isset($tax['post_type']) || ($tax['post_type'] != $pt && !in_array($pt, $tax['post_type']))) {
+                continue;
+            }
+            $tax_obj = get_taxonomy($tax_id);
+            if (!$tax_obj || !is_object($tax_obj)) {
+                continue;
+            }
+            $terms = get_terms(array(
+                'taxonomy' => $tax_id,
+                'hide_empty' => false
+            ));
+            if (count($terms) <= 1) {
+                continue;
+            }
+            echo '<select name="' . $tax_id . '" class="">';
+            echo '<option value="">' . $tax_obj->labels->all_items . '</option>';
+            foreach ($terms as $term) {
+                echo '<option ' . (isset($_GET[$tax_id]) && $_GET[$tax_id] == $term->slug ? 'selected="selected"' : '') . ' value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
+            }
+            echo '</select>';
+        }
     }
 
     /* ----------------------------------------------------------

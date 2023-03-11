@@ -8,6 +8,10 @@ Description: Load custom post types & taxonomies
 Version: 0.19.1
 Author: Darklg
 Author URI: https://darklg.me/
+Text Domain: wpuposttypestaxos
+Domain Path: /lang
+Requires at least: 6.0
+Requires PHP: 8.0
 License: MIT License
 License URI: https://opensource.org/licenses/MIT
 */
@@ -288,8 +292,8 @@ class wputh_add_post_types_taxonomies {
             );
 
             // Allow correct translations for post types with a name starting with a consonant
-            $letters = str_split(utf8_decode($post_type_name));
-            $first_letter = utf8_encode($letters[0]);
+            $letters = str_split($post_type_name);
+            $first_letter = $letters[0];
             if (!in_array($first_letter, $this->non_consonants)) {
                 $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'male_consonant', 'wpuposttypestaxos'), $post_type_name);
                 $args['labels']['view_item'] = sprintf(_x('View %s', 'male_consonant', 'wpuposttypestaxos'), $post_type_name);

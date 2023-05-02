@@ -5,7 +5,7 @@ Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.19.3
+Version: 0.20.0
 Author: Darklg
 Author URI: https://darklg.me/
 Text Domain: wpuposttypestaxos
@@ -19,7 +19,7 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.19.3';
+    private $plugin_version = '0.20.0';
     private $plugin_description;
 
     private $settings_update;
@@ -97,6 +97,12 @@ class wputh_add_post_types_taxonomies {
         ));
         add_action('pre_get_posts', array(&$this,
             'disable_taxonomy_front'
+        ));
+        add_action('wp', array(&$this,
+            'remove_rss_feed_link'
+        ));
+        add_action('template_redirect', array(&$this,
+            'remove_rss_disable_feed'
         ));
         add_action('save_post', array(&$this,
             'clear_cache_posttype'
@@ -757,6 +763,45 @@ class wputh_add_post_types_taxonomies {
                 echo '<option ' . (isset($_GET[$tax_id]) && $_GET[$tax_id] == $term->slug ? 'selected="selected"' : '') . ' value="' . esc_attr($term->slug) . '">' . esc_html($term->name) . '</option>';
             }
             echo '</select>';
+        }
+    }
+
+    /* ----------------------------------------------------------
+      RSS Feed
+    ---------------------------------------------------------- */
+
+    function remove_rss_feed_link() {
+        foreach ($this->post_types as $pt_id => $post_type) {
+            if (!isset($post_type['wpu_disable_feed']) || !$post_type['wpu_disable_feed']) {
+                continue;
+            }
+            if (is_post_type_archive($pt_id)) {
+                remove_action('wp_head', 'feed_links_extra', 3);
+            }
+        }
+    }
+
+    function remove_rss_disable_feed() {
+        if (!is_feed()) {
+            return;
+        }
+
+        $current_post_type = get_post_type();
+
+        foreach ($this->post_types as $pt_id => $post_type) {
+            if (!isset($post_type['wpu_disable_feed']) || !$post_type['wpu_disable_feed']) {
+                continue;
+            }
+
+            /* Force 404 */
+            if ($current_post_type == $pt_id) {
+                global $wp_query;
+                $wp_query->set_404();
+                status_header(404);
+                header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
+                get_template_part('404');
+                die;
+            }
         }
     }
 

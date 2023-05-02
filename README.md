@@ -7,6 +7,7 @@ WPU Post types & Taxos
 add_filter('wputh_get_posttypes', 'wputh_set_theme_posttypes');
 function wputh_set_theme_posttypes($post_types) {
     $post_types['work'] = array(
+        'wpu_disable_feed' => true,
         'menu_icon' => 'dashicons-portfolio',
         'name' => __('Work', 'wputh') ,
         'plural' => __('Works', 'wputh') ,

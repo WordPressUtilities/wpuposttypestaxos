@@ -5,12 +5,12 @@ Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.20.0
+Version: 0.20.1
 Author: Darklg
 Author URI: https://darklg.me/
 Text Domain: wpuposttypestaxos
 Domain Path: /lang
-Requires at least: 6.0
+Requires at least: 6.2
 Requires PHP: 8.0
 License: MIT License
 License URI: https://opensource.org/licenses/MIT
@@ -19,7 +19,7 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.20.0';
+    private $plugin_version = '0.20.1';
     private $plugin_description;
 
     private $settings_update;
@@ -146,7 +146,7 @@ class wputh_add_post_types_taxonomies {
     }
 
     public function autoupdate() {
-        include dirname(__FILE__) . '/inc/WPUBaseUpdate/WPUBaseUpdate.php';
+        include __DIR__ . '/inc/WPUBaseUpdate/WPUBaseUpdate.php';
         $this->settings_update = new \wpuposttypestaxos\WPUBaseUpdate(
             'WordPressUtilities',
             'wpuposttypestaxos',
@@ -645,7 +645,7 @@ class wputh_add_post_types_taxonomies {
         }
     }
 
-    /* http://stackoverflow.com/a/28831998 */
+    /* https://stackoverflow.com/a/28831998 */
     public function moveElementToFrom(&$array, $to, $from = false) {
         if ($from === false) {
             $from = count($array) - 1;

@@ -1,6 +1,8 @@
 WPU Post types & Taxos
 =================
 
+[![PHP workflow](https://github.com/WordPressUtilities/wpuposttypestaxos/actions/workflows/php.yml/badge.svg 'PHP workflow')](https://github.com/WordPressUtilities/wpuposttypestaxos/actions)
+
 ## Add a post type
 
 ```php

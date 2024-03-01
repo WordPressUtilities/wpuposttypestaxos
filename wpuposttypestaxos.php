@@ -5,7 +5,7 @@ Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.20.1
+Version: 0.21.0
 Author: Darklg
 Author URI: https://darklg.me/
 Text Domain: wpuposttypestaxos
@@ -19,7 +19,7 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.20.1';
+    private $plugin_version = '0.21.0';
     private $plugin_description;
 
     private $settings_update;
@@ -59,9 +59,11 @@ class wputh_add_post_types_taxonomies {
         'hierarchical',
         'public',
         'show_in_rest',
-        'rewrite',
         'show_ui',
         'publicly_queryable'
+    );
+    private $tax__values_var = array(
+        'rewrite'
     );
 
     private $non_consonants = array(
@@ -146,7 +148,7 @@ class wputh_add_post_types_taxonomies {
     }
 
     public function autoupdate() {
-        include __DIR__ . '/inc/WPUBaseUpdate/WPUBaseUpdate.php';
+        require_once __DIR__ . '/inc/WPUBaseUpdate/WPUBaseUpdate.php';
         $this->settings_update = new \wpuposttypestaxos\WPUBaseUpdate(
             'WordPressUtilities',
             'wpuposttypestaxos',
@@ -398,8 +400,16 @@ class wputh_add_post_types_taxonomies {
                 )
             );
 
+            // Add bool values
             foreach ($this->tax__values_bool as $val_name) {
                 if (isset($taxo[$val_name]) && is_bool($taxo[$val_name])) {
+                    $args[$val_name] = $taxo[$val_name];
+                }
+            }
+
+            // Add various values
+            foreach ($this->tax__values_var as $val_name) {
+                if (isset($taxo[$val_name]) && !empty($taxo[$val_name])) {
                     $args[$val_name] = $taxo[$val_name];
                 }
             }

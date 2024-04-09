@@ -5,13 +5,14 @@ Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.21.0
+Version: 0.22.0
 Author: Darklg
 Author URI: https://darklg.me/
 Text Domain: wpuposttypestaxos
 Domain Path: /lang
 Requires at least: 6.2
 Requires PHP: 8.0
+Network: true
 License: MIT License
 License URI: https://opensource.org/licenses/MIT
 */
@@ -19,7 +20,7 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.21.0';
+    private $plugin_version = '0.22.0';
     private $plugin_description;
 
     private $settings_update;
@@ -673,14 +674,22 @@ class wputh_add_post_types_taxonomies {
 
         $post_types_search = apply_filters('wputh_get_posttypes', array());
         $post_types = get_post_types(array(), 'objects');
-        foreach ($post_types as $pt_id => $post_type) {
-            if (array_key_exists($pt_id, $post_types_search) && $post_type->rewrite['with_front']) {
-                $results[] = array(
-                    'ID' => false,
-                    'title' => $post_type->label,
-                    'permalink' => get_post_type_archive_link($pt_id),
-                    'info' => __('Archive', 'wpuposttypestaxos')
-                );
+        $s = '';
+        if (isset($query['s']) && $query['s']) {
+            $s = trim(strtolower($query['s']));
+            foreach ($post_types as $pt_id => $post_type) {
+                if(!array_key_exists($pt_id, $post_types_search) || !$post_type->rewrite['with_front']){
+                    continue;
+                }
+                $label_tmp = strtolower($post_type->label);
+                if (strpos($label_tmp, $s) !== false || $label_tmp == $s) {
+                    $results[] = array(
+                        'ID' => false,
+                        'title' => $post_type->label,
+                        'permalink' => get_post_type_archive_link($pt_id),
+                        'info' => __('Archive', 'wpuposttypestaxos')
+                    );
+                }
             }
         }
 

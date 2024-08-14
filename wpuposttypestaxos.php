@@ -5,7 +5,7 @@ Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.22.0
+Version: 0.23.0
 Author: Darklg
 Author URI: https://darklg.me/
 Text Domain: wpuposttypestaxos
@@ -20,7 +20,7 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.22.0';
+    private $plugin_version = '0.23.0';
     private $plugin_description;
 
     private $settings_update;
@@ -91,13 +91,13 @@ class wputh_add_post_types_taxonomies {
         ));
         add_action('init', array(&$this,
             'add_post_types'
-        ));
+        ), 5);
         add_action('post_updated_messages', array(&$this,
             'post_updated_messages'
         ));
         add_action('init', array(&$this,
             'add_taxonomies'
-        ));
+        ), 5);
         add_action('pre_get_posts', array(&$this,
             'disable_taxonomy_front'
         ));
@@ -754,7 +754,7 @@ class wputh_add_post_types_taxonomies {
       Filter taxonomies in admin list
     ---------------------------------------------------------- */
 
-    function restrict_manage_posts() {
+    public function restrict_manage_posts() {
         $taxonomies = apply_filters('wputh_get_taxonomies', array());
         $this->taxonomies = $this->verify_taxonomies($taxonomies);
         $pt = get_post_type();
@@ -789,7 +789,7 @@ class wputh_add_post_types_taxonomies {
       RSS Feed
     ---------------------------------------------------------- */
 
-    function remove_rss_feed_link() {
+    public function remove_rss_feed_link() {
         foreach ($this->post_types as $pt_id => $post_type) {
             if (!isset($post_type['wpu_disable_feed']) || !$post_type['wpu_disable_feed']) {
                 continue;
@@ -800,7 +800,7 @@ class wputh_add_post_types_taxonomies {
         }
     }
 
-    function remove_rss_disable_feed() {
+    public function remove_rss_disable_feed() {
         if (!is_feed()) {
             return;
         }

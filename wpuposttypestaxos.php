@@ -5,7 +5,7 @@ Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.23.1
+Version: 0.24.0
 Author: Darklg
 Author URI: https://darklg.me/
 Text Domain: wpuposttypestaxos
@@ -20,7 +20,7 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.23.1';
+    private $plugin_version = '0.24.0';
     private $plugin_description;
 
     private $settings_update;
@@ -268,9 +268,9 @@ class wputh_add_post_types_taxonomies {
                 }
             }
 
-            $post_type_name = strtolower($post_type['name']);
+            $post_type_name = mb_strtolower($post_type['name']);
             $post_type_name_u = $this->ucfirst($post_type_name);
-            $post_type_plural = strtolower($post_type['plural']);
+            $post_type_plural = mb_strtolower($post_type['plural']);
             $post_type_plural_u = $this->ucfirst($post_type_plural);
 
             // Labels
@@ -301,7 +301,7 @@ class wputh_add_post_types_taxonomies {
             );
 
             // Allow correct translations for post types with a name starting with a consonant
-            $letters = str_split($post_type_name);
+            $letters = mb_str_split($post_type_name);
             $first_letter = $letters[0];
             if (!in_array($first_letter, $this->non_consonants)) {
                 $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'male_consonant', 'wpuposttypestaxos'), $post_type_name);
@@ -437,18 +437,19 @@ class wputh_add_post_types_taxonomies {
                 'menu_name' => $this->ucfirst($plural)
             );
 
-            $taxo_name = strtolower($singular);
+            $taxo_name = mb_strtolower($singular);
+            $taxo_plural = mb_strtolower($plural);
 
             $args['labels']['search_items'] = sprintf(_x('Search %s', 'male', 'wpuposttypestaxos'), $taxo_name);
-            $args['labels']['popular_items'] = $this->ucfirst(strtolower(sprintf(_x('Popular %s', 'male', 'wpuposttypestaxos'), $plural)));
-            $args['labels']['all_items'] = sprintf(_x('All %s', 'male', 'wpuposttypestaxos'), strtolower($plural));
+            $args['labels']['popular_items'] = $this->ucfirst(mb_strtolower(sprintf(_x('Popular %s', 'male', 'wpuposttypestaxos'), $plural)));
+            $args['labels']['all_items'] = sprintf(_x('All %s', 'male', 'wpuposttypestaxos'), $taxo_plural);
             $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'male', 'wpuposttypestaxos'), $taxo_name);
             $args['labels']['update_item'] = sprintf(_x('Update %s', 'male', 'wpuposttypestaxos'), $taxo_name);
             $args['labels']['add_new_item'] = sprintf(_x('Add New %s', 'male', 'wpuposttypestaxos'), $taxo_name);
             $args['labels']['new_item_name'] = sprintf(_x('New %s Name', 'male', 'wpuposttypestaxos'), $taxo_name);
-            $args['labels']['separate_items_with_commas'] = sprintf(_x('Separate %s with commas', 'male', 'wpuposttypestaxos'), strtolower($plural));
-            $args['labels']['add_or_remove_items'] = sprintf(_x('Add or remove %s', 'male', 'wpuposttypestaxos'), strtolower($plural));
-            $args['labels']['choose_from_most_used'] = sprintf(_x('Choose from the most used %s', 'male', 'wpuposttypestaxos'), strtolower($plural));
+            $args['labels']['separate_items_with_commas'] = sprintf(_x('Separate %s with commas', 'male', 'wpuposttypestaxos'), $taxo_plural);
+            $args['labels']['add_or_remove_items'] = sprintf(_x('Add or remove %s', 'male', 'wpuposttypestaxos'), $taxo_plural);
+            $args['labels']['choose_from_most_used'] = sprintf(_x('Choose from the most used %s', 'male', 'wpuposttypestaxos'), $taxo_plural);
             $args['labels']['not_found'] = sprintf(_x('No %s found.', 'male', 'wpuposttypestaxos'), $taxo_name);
 
             // Allow correct translations for post types with a name starting with a consonant
@@ -459,17 +460,17 @@ class wputh_add_post_types_taxonomies {
             }
 
             if ($context == 'female') {
-                $args['labels']['search_items'] = sprintf(_x('Search %s', 'female', 'wpuposttypestaxos'), strtolower($singular));
-                $args['labels']['popular_items'] = $this->ucfirst(strtolower(sprintf(_x('Popular %s', 'female', 'wpuposttypestaxos'), $plural)));
-                $args['labels']['all_items'] = sprintf(_x('All %s', 'female', 'wpuposttypestaxos'), strtolower($plural));
-                $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'female', 'wpuposttypestaxos'), strtolower($singular));
-                $args['labels']['update_item'] = sprintf(_x('Update %s', 'female', 'wpuposttypestaxos'), strtolower($singular));
-                $args['labels']['add_new_item'] = sprintf(_x('Add New %s', 'female', 'wpuposttypestaxos'), strtolower($singular));
-                $args['labels']['new_item_name'] = sprintf(_x('New %s Name', 'female', 'wpuposttypestaxos'), strtolower($singular));
-                $args['labels']['separate_items_with_commas'] = sprintf(_x('Separate %s with commas', 'female', 'wpuposttypestaxos'), strtolower($plural));
-                $args['labels']['add_or_remove_items'] = sprintf(_x('Add or remove %s', 'female', 'wpuposttypestaxos'), strtolower($plural));
-                $args['labels']['choose_from_most_used'] = sprintf(_x('Choose from the most used %s', 'female', 'wpuposttypestaxos'), strtolower($plural));
-                $args['labels']['not_found'] = sprintf(_x('No %s found.', 'female', 'wpuposttypestaxos'), strtolower($singular));
+                $args['labels']['search_items'] = sprintf(_x('Search %s', 'female', 'wpuposttypestaxos'), $taxo_name);
+                $args['labels']['popular_items'] = $this->ucfirst(mb_strtolower(sprintf(_x('Popular %s', 'female', 'wpuposttypestaxos'), $plural)));
+                $args['labels']['all_items'] = sprintf(_x('All %s', 'female', 'wpuposttypestaxos'), $taxo_plural);
+                $args['labels']['edit_item'] = sprintf(_x('Edit %s', 'female', 'wpuposttypestaxos'), $taxo_name);
+                $args['labels']['update_item'] = sprintf(_x('Update %s', 'female', 'wpuposttypestaxos'), $taxo_name);
+                $args['labels']['add_new_item'] = sprintf(_x('Add New %s', 'female', 'wpuposttypestaxos'), $taxo_name);
+                $args['labels']['new_item_name'] = sprintf(_x('New %s Name', 'female', 'wpuposttypestaxos'), $taxo_name);
+                $args['labels']['separate_items_with_commas'] = sprintf(_x('Separate %s with commas', 'female', 'wpuposttypestaxos'), $taxo_plural);
+                $args['labels']['add_or_remove_items'] = sprintf(_x('Add or remove %s', 'female', 'wpuposttypestaxos'), $taxo_plural);
+                $args['labels']['choose_from_most_used'] = sprintf(_x('Choose from the most used %s', 'female', 'wpuposttypestaxos'), $taxo_plural);
+                $args['labels']['not_found'] = sprintf(_x('No %s found.', 'female', 'wpuposttypestaxos'), $taxo_name);
             }
 
             if (isset($taxo['labels']) && is_array($taxo['labels'])) {
@@ -539,10 +540,10 @@ class wputh_add_post_types_taxonomies {
                 $menu_icon = 'dashicons-admin-post';
             }
             $num = number_format_i18n($num_posts->publish);
-            $text = strtolower(_n($post_type->labels->singular_name, $post_type->labels->name, intval($num_posts->publish)));
+            $text = mb_strtolower(_n($post_type->labels->singular_name, $post_type->labels->name, intval($num_posts->publish)));
             if ($num == 0) {
                 $num = $female ? _x('No', 'female-none', 'wpuposttypestaxos') : _x('No', 'male-none', 'wpuposttypestaxos');
-                $text = strtolower($post_type->labels->singular_name);
+                $text = mb_strtolower($post_type->labels->singular_name);
             }
             echo '<li class="wpucpt-count"><a href="' . admin_url('edit.php?post_type=' . $post_type->name) . '"><i class="wpucpt-icon dashicons ' . $menu_icon . '"></i>' . $num . ' ' . $text . '</a></li>';
         }
@@ -554,10 +555,10 @@ class wputh_add_post_types_taxonomies {
             $female = isset($this->taxonomies[$id], $this->taxonomies[$id]['female']) && $this->taxonomies[$id]['female'];
             $num_terms = $this->wp_count_terms($taxonomy->name);
             $num = number_format_i18n($num_terms);
-            $text = strtolower(_n($taxonomy->labels->singular_name, $taxonomy->labels->name, intval($num_terms)));
+            $text = mb_strtolower(_n($taxonomy->labels->singular_name, $taxonomy->labels->name, intval($num_terms)));
             if ($num == 0) {
                 $num = $female ? _x('No', 'female-none', 'wpuposttypestaxos') : _x('No', 'male-none', 'wpuposttypestaxos');
-                $text = strtolower($taxonomy->labels->singular_name);
+                $text = mb_strtolower($taxonomy->labels->singular_name);
             }
             $linked_post = '';
             if (property_exists($taxonomy, 'object_type') && count($taxonomy->object_type) == 1) {

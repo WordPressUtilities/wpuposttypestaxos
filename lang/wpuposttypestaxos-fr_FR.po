@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WPU Options\n"
-"POT-Creation-Date: 2023-02-13 11:59+0100\n"
+"POT-Creation-Date: 2024-10-09 11:43+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Darklg <darklg.blog@gmail.com>\n"
 "Language-Team: \n"
@@ -9,419 +9,419 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.5\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-KeywordsList: __;_e;_x:1,2c\n"
 "X-Poedit-SearchPath-0: ../.\n"
 
-#: .././wpuposttypestaxos.php:155
+#: .././wpuposttypestaxos.php:169
 msgid "Load custom post types & taxonomies"
 msgstr "Charge des custom post types et des taxonomies"
 
-#: .././wpuposttypestaxos.php:266
+#: .././wpuposttypestaxos.php:280
 msgid "Add New"
 msgstr "Ajouter"
 
-#: .././wpuposttypestaxos.php:267 .././wpuposttypestaxos.php:425
+#: .././wpuposttypestaxos.php:281 .././wpuposttypestaxos.php:448
 #, php-format
 msgctxt "male"
 msgid "Add New %s"
 msgstr "Ajouter un %s"
 
-#: .././wpuposttypestaxos.php:268 .././wpuposttypestaxos.php:423
+#: .././wpuposttypestaxos.php:282 .././wpuposttypestaxos.php:446
 #, php-format
 msgctxt "male"
 msgid "Edit %s"
 msgstr "Modifier cet %s"
 
-#: .././wpuposttypestaxos.php:269
+#: .././wpuposttypestaxos.php:283
 #, php-format
 msgctxt "male"
 msgid "New %s"
 msgstr "Nouveau %s"
 
-#: .././wpuposttypestaxos.php:270 .././wpuposttypestaxos.php:422
+#: .././wpuposttypestaxos.php:284 .././wpuposttypestaxos.php:445
 #, php-format
 msgctxt "male"
 msgid "All %s"
 msgstr "Tous les %s"
 
-#: .././wpuposttypestaxos.php:271
+#: .././wpuposttypestaxos.php:285
 #, php-format
 msgctxt "male"
 msgid "View %s"
 msgstr "Voir cet %s"
 
-#: .././wpuposttypestaxos.php:272
+#: .././wpuposttypestaxos.php:286
 #, php-format
 msgctxt "maleplural"
 msgid "View %s"
 msgstr "Voir les %s"
 
-#: .././wpuposttypestaxos.php:273 .././wpuposttypestaxos.php:420
+#: .././wpuposttypestaxos.php:287 .././wpuposttypestaxos.php:443
 #, php-format
 msgctxt "male"
 msgid "Search %s"
 msgstr "Rechercher un %s"
 
-#: .././wpuposttypestaxos.php:274
+#: .././wpuposttypestaxos.php:288
 #, php-format
 msgctxt "male"
 msgid "No %s found"
 msgstr "Aucun %s trouvé"
 
-#: .././wpuposttypestaxos.php:275
+#: .././wpuposttypestaxos.php:289
 #, php-format
 msgctxt "male"
 msgid "No %s found in Trash"
 msgstr "Aucun %s trouvé dans la corbeille"
 
-#: .././wpuposttypestaxos.php:278
+#: .././wpuposttypestaxos.php:292
 #, php-format
 msgctxt "male"
 msgid "%s published."
 msgstr "%s publié."
 
-#: .././wpuposttypestaxos.php:279
+#: .././wpuposttypestaxos.php:293
 #, php-format
 msgctxt "male"
 msgid "%s published privately."
 msgstr "%s publié en privé."
 
-#: .././wpuposttypestaxos.php:280
+#: .././wpuposttypestaxos.php:294
 #, php-format
 msgctxt "male"
 msgid "%s reverted to draft."
 msgstr "%s remis en brouillon."
 
-#: .././wpuposttypestaxos.php:281
+#: .././wpuposttypestaxos.php:295
 #, php-format
 msgctxt "male"
 msgid "%s draft updated."
 msgstr "Le brouillon de l'%s a été mis à jour."
 
-#: .././wpuposttypestaxos.php:282
+#: .././wpuposttypestaxos.php:296
 #, php-format
 msgctxt "male"
 msgid "%s scheduled."
 msgstr "%s programmé."
 
-#: .././wpuposttypestaxos.php:283
+#: .././wpuposttypestaxos.php:297
 #, php-format
 msgctxt "male"
 msgid "%s updated."
 msgstr "%s mis à jour."
 
-#: .././wpuposttypestaxos.php:284
+#: .././wpuposttypestaxos.php:298
 #, php-format
 msgctxt "male"
 msgid "%s saved."
 msgstr "%s publié."
 
-#: .././wpuposttypestaxos.php:285
+#: .././wpuposttypestaxos.php:299
 #, php-format
 msgctxt "male"
 msgid "%s submitted."
 msgstr "%s envoyé."
 
-#: .././wpuposttypestaxos.php:286
+#: .././wpuposttypestaxos.php:300
 #, php-format
 msgctxt "male"
 msgid "Preview %s"
 msgstr "Prévisualiser l’%s"
 
-#: .././wpuposttypestaxos.php:293 .././wpuposttypestaxos.php:435
+#: .././wpuposttypestaxos.php:307 .././wpuposttypestaxos.php:458
 #, php-format
 msgctxt "male_consonant"
 msgid "Edit %s"
 msgstr "Modifier ce %s"
 
-#: .././wpuposttypestaxos.php:294
+#: .././wpuposttypestaxos.php:308
 #, php-format
 msgctxt "male_consonant"
 msgid "View %s"
 msgstr "Voir ce %s"
 
-#: .././wpuposttypestaxos.php:295
+#: .././wpuposttypestaxos.php:309
 #, php-format
 msgctxt "male_consonant"
 msgid "Preview %s"
 msgstr "Prévisualiser le %s"
 
-#: .././wpuposttypestaxos.php:296
+#: .././wpuposttypestaxos.php:310
 #, php-format
 msgctxt "male_consonant"
 msgid "%s draft updated"
 msgstr "Le brouillon du %s a été mis à jour"
 
-#: .././wpuposttypestaxos.php:301 .././wpuposttypestaxos.php:445
+#: .././wpuposttypestaxos.php:315 .././wpuposttypestaxos.php:468
 #, php-format
 msgctxt "female"
 msgid "Add New %s"
 msgstr "Ajouter une %s"
 
-#: .././wpuposttypestaxos.php:302 .././wpuposttypestaxos.php:443
+#: .././wpuposttypestaxos.php:316 .././wpuposttypestaxos.php:466
 #, php-format
 msgctxt "female"
 msgid "Edit %s"
 msgstr "Modifier cette %s"
 
-#: .././wpuposttypestaxos.php:303
+#: .././wpuposttypestaxos.php:317
 #, php-format
 msgctxt "female"
 msgid "New %s"
 msgstr "Nouvelle %s"
 
-#: .././wpuposttypestaxos.php:304 .././wpuposttypestaxos.php:442
+#: .././wpuposttypestaxos.php:318 .././wpuposttypestaxos.php:465
 #, php-format
 msgctxt "female"
 msgid "All %s"
 msgstr "Toutes les %s"
 
-#: .././wpuposttypestaxos.php:305
+#: .././wpuposttypestaxos.php:319
 #, php-format
 msgctxt "female"
 msgid "View %s"
 msgstr "Voir cette %s"
 
-#: .././wpuposttypestaxos.php:306
+#: .././wpuposttypestaxos.php:320
 #, php-format
 msgctxt "femaleplural"
 msgid "View %s"
 msgstr "Voir les %s"
 
-#: .././wpuposttypestaxos.php:307 .././wpuposttypestaxos.php:440
+#: .././wpuposttypestaxos.php:321 .././wpuposttypestaxos.php:463
 #, php-format
 msgctxt "female"
 msgid "Search %s"
 msgstr "Rechercher une %s"
 
-#: .././wpuposttypestaxos.php:308
+#: .././wpuposttypestaxos.php:322
 #, php-format
 msgctxt "female"
 msgid "No %s found"
 msgstr "Aucune %s trouvée"
 
-#: .././wpuposttypestaxos.php:309
+#: .././wpuposttypestaxos.php:323
 #, php-format
 msgctxt "female"
 msgid "No %s found in Trash"
 msgstr "Aucune %s trouvée dans la corbeille"
 
-#: .././wpuposttypestaxos.php:310
+#: .././wpuposttypestaxos.php:324
 #, php-format
 msgctxt "female"
 msgid "%s published."
 msgstr "%s publiée."
 
-#: .././wpuposttypestaxos.php:311
+#: .././wpuposttypestaxos.php:325
 #, php-format
 msgctxt "female"
 msgid "%s published privately."
 msgstr "%s publiée en privé."
 
-#: .././wpuposttypestaxos.php:312
+#: .././wpuposttypestaxos.php:326
 #, php-format
 msgctxt "female"
 msgid "%s reverted to draft."
 msgstr "%s remise en brouillon."
 
-#: .././wpuposttypestaxos.php:313
+#: .././wpuposttypestaxos.php:327
 #, php-format
 msgctxt "female"
 msgid "%s draft updated."
 msgstr "Le brouillon de la %s a été mise à jour."
 
-#: .././wpuposttypestaxos.php:314
+#: .././wpuposttypestaxos.php:328
 #, php-format
 msgctxt "female"
 msgid "%s scheduled."
 msgstr "%s programmée."
 
-#: .././wpuposttypestaxos.php:315
+#: .././wpuposttypestaxos.php:329
 #, php-format
 msgctxt "female"
 msgid "%s updated."
 msgstr "%s mise à jour."
 
-#: .././wpuposttypestaxos.php:316
+#: .././wpuposttypestaxos.php:330
 #, php-format
 msgctxt "female"
 msgid "%s saved."
 msgstr "%s publiée."
 
-#: .././wpuposttypestaxos.php:317
+#: .././wpuposttypestaxos.php:331
 #, php-format
 msgctxt "female"
 msgid "%s submitted."
 msgstr "%s envoyée."
 
-#: .././wpuposttypestaxos.php:318
+#: .././wpuposttypestaxos.php:332
 #, php-format
 msgctxt "female"
 msgid "Preview %s"
 msgstr "Prévisualiser la %s"
 
-#: .././wpuposttypestaxos.php:320
+#: .././wpuposttypestaxos.php:334
 #, php-format
 msgctxt "female_nonconsonant"
 msgid "Preview %s"
 msgstr "Prévisualiser l’%s"
 
-#: .././wpuposttypestaxos.php:321
+#: .././wpuposttypestaxos.php:335
 #, php-format
 msgctxt "female_nonconsonant"
 msgid "%s draft updated"
 msgstr "Le brouillon de l’%s a été mis à jour"
 
-#: .././wpuposttypestaxos.php:341
+#: .././wpuposttypestaxos.php:355
 msgid "Post published."
 msgstr "Publication publiée."
 
-#: .././wpuposttypestaxos.php:342
+#: .././wpuposttypestaxos.php:356
 msgid "Post updated."
 msgstr "Publication mise à jour."
 
-#: .././wpuposttypestaxos.php:343
+#: .././wpuposttypestaxos.php:357
 msgid "Post submitted."
 msgstr "Publication envoyée."
 
-#: .././wpuposttypestaxos.php:344
+#: .././wpuposttypestaxos.php:358
 msgid "Post saved."
 msgstr "Publication enregistrée."
 
-#: .././wpuposttypestaxos.php:345
+#: .././wpuposttypestaxos.php:359
 msgid "Post draft updated."
 msgstr "Le brouillon de l'article a été mis à jour."
 
-#: .././wpuposttypestaxos.php:346
+#: .././wpuposttypestaxos.php:360
 msgid "View post"
 msgstr "Voir la publication"
 
-#: .././wpuposttypestaxos.php:347
+#: .././wpuposttypestaxos.php:361
 msgid "Post"
 msgstr "Publication"
 
-#: .././wpuposttypestaxos.php:348
+#: .././wpuposttypestaxos.php:362
 msgid "Preview post"
 msgstr "Prévisualiser la publication"
 
-#: .././wpuposttypestaxos.php:350
+#: .././wpuposttypestaxos.php:364
 msgctxt "male"
 msgid "scheduled"
 msgstr "programmé"
 
-#: .././wpuposttypestaxos.php:350
+#: .././wpuposttypestaxos.php:364
 msgctxt "female"
 msgid "scheduled"
 msgstr "programmée"
 
-#: .././wpuposttypestaxos.php:421
+#: .././wpuposttypestaxos.php:444
 #, php-format
 msgctxt "male"
 msgid "Popular %s"
 msgstr "%s populaires"
 
-#: .././wpuposttypestaxos.php:424
+#: .././wpuposttypestaxos.php:447
 #, php-format
 msgctxt "male"
 msgid "Update %s"
 msgstr "Mettre à jour cet %s"
 
-#: .././wpuposttypestaxos.php:426
+#: .././wpuposttypestaxos.php:449
 #, php-format
 msgctxt "male"
 msgid "New %s Name"
 msgstr "Nouveau nom de %s"
 
-#: .././wpuposttypestaxos.php:427
+#: .././wpuposttypestaxos.php:450
 #, php-format
 msgctxt "male"
 msgid "Separate %s with commas"
 msgstr "Séparer les %s avec des virgules"
 
-#: .././wpuposttypestaxos.php:428
+#: .././wpuposttypestaxos.php:451
 #, php-format
 msgctxt "male"
 msgid "Add or remove %s"
 msgstr "Ajouter ou supprimer un %s"
 
-#: .././wpuposttypestaxos.php:429
+#: .././wpuposttypestaxos.php:452
 #, php-format
 msgctxt "male"
 msgid "Choose from the most used %s"
 msgstr "Choisir parmi les %s les plus utilisés"
 
-#: .././wpuposttypestaxos.php:430
+#: .././wpuposttypestaxos.php:453
 #, php-format
 msgctxt "male"
 msgid "No %s found."
 msgstr "Aucun %s trouvé."
 
-#: .././wpuposttypestaxos.php:436
+#: .././wpuposttypestaxos.php:459
 #, php-format
 msgctxt "male_consonant"
 msgid "Update %s"
 msgstr "Mettre à jour ce %s"
 
-#: .././wpuposttypestaxos.php:441
+#: .././wpuposttypestaxos.php:464
 #, php-format
 msgctxt "female"
 msgid "Popular %s"
 msgstr "%s populaires"
 
-#: .././wpuposttypestaxos.php:444
+#: .././wpuposttypestaxos.php:467
 #, php-format
 msgctxt "female"
 msgid "Update %s"
 msgstr "Mettre à jour cette %s"
 
-#: .././wpuposttypestaxos.php:446
+#: .././wpuposttypestaxos.php:469
 #, php-format
 msgctxt "female"
 msgid "New %s Name"
 msgstr "Nouveau nom de %s"
 
-#: .././wpuposttypestaxos.php:447
+#: .././wpuposttypestaxos.php:470
 #, php-format
 msgctxt "female"
 msgid "Separate %s with commas"
 msgstr "Séparer les %s avec des virgules"
 
-#: .././wpuposttypestaxos.php:448
+#: .././wpuposttypestaxos.php:471
 #, php-format
 msgctxt "female"
 msgid "Add or remove %s"
 msgstr "Ajouter ou supprimer une %s"
 
-#: .././wpuposttypestaxos.php:449
+#: .././wpuposttypestaxos.php:472
 #, php-format
 msgctxt "female"
 msgid "Choose from the most used %s"
 msgstr "Choisir parmi les %s les plus utilisées"
 
-#: .././wpuposttypestaxos.php:450
+#: .././wpuposttypestaxos.php:473
 #, php-format
 msgctxt "female"
 msgid "No %s found."
 msgstr "Aucune %s trouvée."
 
-#: .././wpuposttypestaxos.php:522 .././wpuposttypestaxos.php:537
+#: .././wpuposttypestaxos.php:545 .././wpuposttypestaxos.php:560
 msgctxt "female-none"
 msgid "No"
 msgstr "Aucune"
 
-#: .././wpuposttypestaxos.php:522 .././wpuposttypestaxos.php:537
+#: .././wpuposttypestaxos.php:545 .././wpuposttypestaxos.php:560
 msgctxt "male-none"
 msgid "No"
 msgstr "Aucun"
 
-#: .././wpuposttypestaxos.php:661
+#: .././wpuposttypestaxos.php:691
 msgid "Archive"
 msgstr "Archive"
 
-#: .././wpuposttypestaxos.php:776
+#: .././wpuposttypestaxos.php:846
 msgid "Add Media"
 msgstr "Ajouter un Media"
 

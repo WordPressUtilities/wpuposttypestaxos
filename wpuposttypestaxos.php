@@ -5,7 +5,7 @@ Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.24.2
+Version: 0.25.0
 Author: Darklg
 Author URI: https://darklg.me/
 Text Domain: wpuposttypestaxos
@@ -20,10 +20,9 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.24.2';
+    private $plugin_version = '0.25.0';
     private $plugin_description;
 
-    private $settings_update;
     public $post_types;
     public $taxonomies;
 
@@ -145,12 +144,24 @@ class wputh_add_post_types_taxonomies {
             add_action('admin_enqueue_scripts', array(&$this,
                 'admin_style'
             ));
+            add_action('admin_footer', function () {
+                $hidden_boxes = array();
+                foreach ($this->taxonomies as $slug => $taxo) {
+                    if (isset($taxo['wputh__hide_postbox']) && $taxo['wputh__hide_postbox']) {
+                        $hidden_boxes[] = '#poststuff #' . $slug . 'div.postbox';
+                    }
+                }
+                if (!empty($hidden_boxes)) {
+                    echo '<style>' . implode(',', $hidden_boxes) . '{display:none}</style>';
+                }
+
+            });
         }
     }
 
     public function autoupdate() {
         require_once __DIR__ . '/inc/WPUBaseUpdate/WPUBaseUpdate.php';
-        $this->settings_update = new \wpuposttypestaxos\WPUBaseUpdate(
+        new \wpuposttypestaxos\WPUBaseUpdate(
             'WordPressUtilities',
             'wpuposttypestaxos',
             $this->plugin_version);
@@ -273,7 +284,6 @@ class wputh_add_post_types_taxonomies {
             $post_type_name = mb_strtolower($post_type['name']);
             $post_type_name_u = $this->ucfirst($post_type_name);
             $post_type_plural = mb_strtolower($post_type['plural']);
-            $post_type_plural_u = $this->ucfirst($post_type_plural);
 
             // Labels
             $args['labels'] = array(

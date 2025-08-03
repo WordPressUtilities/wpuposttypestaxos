@@ -5,7 +5,7 @@ Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.25.0
+Version: 0.26.0
 Author: Darklg
 Author URI: https://darklg.me/
 Text Domain: wpuposttypestaxos
@@ -20,7 +20,7 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.25.0';
+    private $plugin_version = '0.26.0';
     private $plugin_description;
 
     public $post_types;
@@ -127,6 +127,9 @@ class wputh_add_post_types_taxonomies {
         add_action('restrict_manage_posts', array(&$this,
             'restrict_manage_posts'
         ), 10);
+        add_filter('wp_sitemaps_post_types', array(&$this,
+            'restrict_sitemaps_post_types'
+        ));
 
         if (is_admin()) {
             add_action('admin_menu', array(&$this,
@@ -208,6 +211,11 @@ class wputh_add_post_types_taxonomies {
                     'thumbnail'
                 )
             );
+
+            // Hide singular in front
+            if (isset($post_type['wputh__hide_singular']) && $post_type['wputh__hide_singular']) {
+                $args['exclude_from_search'] = true;
+            }
 
             // Hide only in front
             if (isset($post_type['wputh__hide_front']) && is_bool($post_type['wputh__hide_front']) && $post_type['wputh__hide_front'] !== false) {
@@ -753,6 +761,22 @@ class wputh_add_post_types_taxonomies {
             remove_action('wp_head', 'wp_shortlink_wp_head');
             remove_action('wp_head', 'adjacent_posts_rel_link_wp_head');
         }
+
+        if (isset($this->post_types[$post_type], $this->post_types[$post_type]['wputh__hide_singular']) && $this->post_types[$post_type]['wputh__hide_singular']) {
+            $this->send_404();
+        }
+    }
+
+    /* ----------------------------------------------------------
+      Sitemaps
+    ---------------------------------------------------------- */
+
+    public function restrict_sitemaps_post_types($post_types) {
+        foreach ($this->post_types as $slug => $post_type) {
+            if (isset($post_type['wputh__hide_singular']) && $post_type['wputh__hide_singular']) {
+                unset($post_types[$slug]);
+            }
+        }
     }
 
     /* ----------------------------------------------------------
@@ -827,14 +851,22 @@ class wputh_add_post_types_taxonomies {
 
             /* Force 404 */
             if ($current_post_type == $pt_id) {
-                global $wp_query;
-                $wp_query->set_404();
-                status_header(404);
-                header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
-                get_template_part('404');
-                die;
+                $this->send_404();
             }
         }
+    }
+
+    /* ----------------------------------------------------------
+      Send a 404
+    ---------------------------------------------------------- */
+
+    public function send_404() {
+        global $wp_query;
+        $wp_query->set_404();
+        status_header(404);
+        header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
+        get_template_part('404');
+        die;
     }
 
     /* ----------------------------------------------------------

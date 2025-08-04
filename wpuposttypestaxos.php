@@ -5,7 +5,7 @@ Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.26.0
+Version: 0.26.1
 Author: Darklg
 Author URI: https://darklg.me/
 Text Domain: wpuposttypestaxos
@@ -20,8 +20,9 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.26.0';
+    private $plugin_version = '0.26.1';
     private $plugin_description;
+    public $basetoolbox;
 
     public $post_types;
     public $taxonomies;
@@ -83,7 +84,7 @@ class wputh_add_post_types_taxonomies {
 
     public function __construct() {
         add_action('plugins_loaded', array(&$this,
-            'autoupdate'
+            'load_dependencies'
         ));
         add_action('after_setup_theme', array(&$this,
             'load_plugin_textdomain'
@@ -162,12 +163,17 @@ class wputh_add_post_types_taxonomies {
         }
     }
 
-    public function autoupdate() {
+    public function load_dependencies() {
         require_once __DIR__ . '/inc/WPUBaseUpdate/WPUBaseUpdate.php';
         new \wpuposttypestaxos\WPUBaseUpdate(
             'WordPressUtilities',
             'wpuposttypestaxos',
             $this->plugin_version);
+
+        require_once __DIR__ . '/inc/WPUBaseToolbox/WPUBaseToolbox.php';
+        $this->basetoolbox = new \wpuposttypestaxos\WPUBaseToolbox(array(
+            'need_form_js' => false
+        ));
     }
 
     public function admin_style() {
@@ -763,7 +769,7 @@ class wputh_add_post_types_taxonomies {
         }
 
         if (isset($this->post_types[$post_type], $this->post_types[$post_type]['wputh__hide_singular']) && $this->post_types[$post_type]['wputh__hide_singular']) {
-            $this->send_404();
+            $this->basetoolbox->send_404();
         }
     }
 
@@ -851,22 +857,9 @@ class wputh_add_post_types_taxonomies {
 
             /* Force 404 */
             if ($current_post_type == $pt_id) {
-                $this->send_404();
+                $this->basetoolbox->send_404();
             }
         }
-    }
-
-    /* ----------------------------------------------------------
-      Send a 404
-    ---------------------------------------------------------- */
-
-    public function send_404() {
-        global $wp_query;
-        $wp_query->set_404();
-        status_header(404);
-        header('Content-Type: text/html; charset=' . get_bloginfo('charset'));
-        get_template_part('404');
-        die;
     }
 
     /* ----------------------------------------------------------

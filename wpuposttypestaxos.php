@@ -5,7 +5,7 @@ Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.26.1
+Version: 0.26.2
 Author: Darklg
 Author URI: https://darklg.me/
 Text Domain: wpuposttypestaxos
@@ -20,7 +20,7 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.26.1';
+    private $plugin_version = '0.26.2';
     private $plugin_description;
     public $basetoolbox;
 
@@ -783,6 +783,7 @@ class wputh_add_post_types_taxonomies {
                 unset($post_types[$slug]);
             }
         }
+        return $post_types;
     }
 
     /* ----------------------------------------------------------

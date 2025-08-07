@@ -5,7 +5,7 @@ Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.26.2
+Version: 0.27.0
 Author: Darklg
 Author URI: https://darklg.me/
 Text Domain: wpuposttypestaxos
@@ -20,7 +20,7 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.26.2';
+    private $plugin_version = '0.27.0';
     private $plugin_description;
     public $basetoolbox;
 
@@ -98,6 +98,9 @@ class wputh_add_post_types_taxonomies {
         add_action('init', array(&$this,
             'add_taxonomies'
         ), 5);
+        add_action('init', array(&$this,
+            'load_sitemap_provider'
+        ));
         add_action('pre_get_posts', array(&$this,
             'disable_taxonomy_front'
         ));
@@ -516,6 +519,19 @@ class wputh_add_post_types_taxonomies {
                 $query->set_404();
             }
         }
+    }
+
+    /* ----------------------------------------------------------
+      Add post type archives to sitemap
+    ---------------------------------------------------------- */
+
+    public function load_sitemap_provider() {
+        if (!function_exists('wp_register_sitemap_provider')) {
+            return;
+        }
+
+        include_once __DIR__ . '/inc/sitemap-provider.php';
+        wp_register_sitemap_provider('wpuposttypestaxosarchives', new WPUPostTypeTaxosSitemapProvider());
     }
 
     /* ----------------------------------------------------------

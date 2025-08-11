@@ -1,8 +1,10 @@
-#wpuposttypetaxos_media_upload .hndle {
+@charset "UTF-8";
+
+#wpuposttypestaxos_media_upload .hndle {
     display: none;
 }
 
-.wpuposttypetaxos-wrapper-addmedia {
+.wpuposttypestaxos-wrapper-addmedia {
     margin-bottom: 20px;
 }
 

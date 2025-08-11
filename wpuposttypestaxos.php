@@ -5,7 +5,7 @@ Plugin Name: WPU Post types & taxonomies
 Plugin URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Update URI: https://github.com/WordPressUtilities/wpuposttypestaxos
 Description: Load custom post types & taxonomies
-Version: 0.27.0
+Version: 0.27.1
 Author: Darklg
 Author URI: https://darklg.me/
 Text Domain: wpuposttypestaxos
@@ -20,7 +20,7 @@ License URI: https://opensource.org/licenses/MIT
 defined('ABSPATH') or die(':(');
 
 class wputh_add_post_types_taxonomies {
-    private $plugin_version = '0.27.0';
+    private $plugin_version = '0.27.1';
     private $plugin_description;
     public $basetoolbox;
 
@@ -531,7 +531,7 @@ class wputh_add_post_types_taxonomies {
         }
 
         include_once __DIR__ . '/inc/sitemap-provider.php';
-        wp_register_sitemap_provider('wpuposttypestaxosarchives', new WPUPostTypeTaxosSitemapProvider());
+        wp_register_sitemap_provider('wpuposttypestaxosarchives', new WPUPostTypesTaxosSitemapProvider());
     }
 
     /* ----------------------------------------------------------
@@ -888,7 +888,7 @@ class wputh_add_post_types_taxonomies {
         foreach ($this->post_types as $slug => $post_type) {
             if (isset($post_type['add_media_box']) && $post_type['add_media_box']) {
                 wp_enqueue_media(array('post' => $post->ID));
-                add_meta_box('wpuposttypetaxos_media_upload', ' ', array(&$this,
+                add_meta_box('wpuposttypestaxos_media_upload', ' ', array(&$this,
                     'load_media_upload'
                 ), $slug, 'normal', 'high');
             }
@@ -897,7 +897,7 @@ class wputh_add_post_types_taxonomies {
 
     public function load_media_upload() {
         global $post;
-        echo '<div class="wpuposttypetaxos-wrapper-addmedia"><a href="media-upload.php?post_id=' . $post->ID . '&TB_iframe=1" class="button insert-media add_media" id="content-add_media" onclick="return false;"><span style="vertical-align:-5px;margin-right:5px;" class="dashicons dashicons-admin-media"></span> ' . __('Add Media') . '</a></div>';
+        echo '<div class="wpuposttypestaxos-wrapper-addmedia"><a href="media-upload.php?post_id=' . $post->ID . '&TB_iframe=1" class="button insert-media add_media" id="content-add_media" onclick="return false;"><span style="vertical-align:-5px;margin-right:5px;" class="dashicons dashicons-admin-media"></span> ' . __('Add Media') . '</a></div>';
         echo '<script>jQuery(document).ready(function() {
         var postbox = jQuery("#content-add_media").closest(".postbox");
     postbox.removeClass("postbox");
